@@ -13,10 +13,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Client
+namespace Client.Windows
 {
+    /// <summary>
+    /// Logika interakcji dla klasy MainWindow.xaml
+    /// </summary>
     public partial class MainWindow : Window
     {
+        
         public static Socket socket;
 
         public MainWindow(Socket connetion)
@@ -27,18 +31,18 @@ namespace Client
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            ChatWindow win = new ChatWindow();
-            win.Show();
+            ChatWindow window = new ChatWindow();
+            UiControl.OpenWindow(this, window);
+
         }
 
         private void Button_Click1(object sender, RoutedEventArgs e)
         {
             socket.Close();
-            LoginWindow win = new LoginWindow();
-            App.Current.MainWindow = win;
-            this.Close();
-            win.Show();
+            LoginWindow window = new LoginWindow();
+            UiControl.ChangeWindow(this, window);
 
         }
     }
 }
+

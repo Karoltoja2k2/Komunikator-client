@@ -1,0 +1,28 @@
+﻿<Window x:Class="Client.Windows.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client.Windows"
+        mc:Ignorable="d"
+        Title="LoginWindow" Height="450" Width="400">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="99,154,0,0" TextWrapping="Wrap" Text="Numer" VerticalAlignment="Top" Height="23" Width="55"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="99,177,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="196"/>
+        <TextBlock HorizontalAlignment="Left" Margin="99,205,0,0" TextWrapping="Wrap" Text="Hasło" VerticalAlignment="Top" Height="23" Width="55"/>
+        <PasswordBox HorizontalAlignment="Left" Margin="99,228,0,0" VerticalAlignment="Top" Width="196" Height="23"/>
+        <CheckBox Content="Nie wylogowywuj" HorizontalAlignment="Left" Margin="99,256,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,1.448"/>
+        <Button Content="Zaloguj" HorizontalAlignment="Left" Margin="220,288,0,0" VerticalAlignment="Top" Width="75" Click="Login"/>
+
+        <TextBlock Name="alertText" HorizontalAlignment="Left" Margin="99,340,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="227"/>
+
+        <TextBlock HorizontalAlignment="Left" Margin="48,393,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="321">     
+            Jeśli nie masz jeszcze konta możesz sie 
+            <Hyperlink Click="RegistrationPage">
+                zarejestrować
+            </Hyperlink>
+        </TextBlock>
+
+    </Grid>
+
+</Window>
