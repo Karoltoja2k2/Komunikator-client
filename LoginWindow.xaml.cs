@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,30 +16,33 @@ using System.Windows.Shapes;
 
 namespace Client
 {
-    public partial class MainWindow : Window
+    /// <summary>
+    /// Logika interakcji dla klasy LoginWindow.xaml
+    /// </summary>
+    public partial class LoginWindow : Window
     {
         public static Socket socket;
+        private byte[] buffer;
 
-        public MainWindow(Socket connetion)
+
+        public LoginWindow()
         {
-            socket = connetion;
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Login(object sender, RoutedEventArgs e)
         {
-            ChatWindow win = new ChatWindow();
-            win.Show();
-        }
+            // Authentication logic
+            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5555);
+            socket.Connect(endPoint);
 
-        private void Button_Click1(object sender, RoutedEventArgs e)
-        {
-            socket.Close();
-            LoginWindow win = new LoginWindow();
+            MainWindow win = new MainWindow(socket);
             App.Current.MainWindow = win;
             this.Close();
             win.Show();
 
         }
+
     }
 }

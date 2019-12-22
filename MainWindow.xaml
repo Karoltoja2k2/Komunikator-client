@@ -7,11 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="Send message" HorizontalAlignment="Left" Margin="627,319,0,0" VerticalAlignment="Top" Width="155" Click="Send_Msg" Height="90"/>
-        <TextBox Name="messageInput" HorizontalAlignment="Left" Height="90" TextWrapping="Wrap" Text="..." VerticalAlignment="Top" Width="612" Margin="10,319,0,0" />
-        
-        <Button Name="connectionButton" Content="Connect" HorizontalAlignment="Left" Margin="627,39,0,0" VerticalAlignment="Top" Width="155" Click="Connect"/>
-        <TextBox Name="nameInput" HorizontalAlignment="Left" Height="23" Margin="627,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155"/>
+        <Button Content="Konwersacja" HorizontalAlignment="Left" Margin="72,49,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Button Content="Wyloguj" HorizontalAlignment="Left" Margin="707,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click1"/>
 
     </Grid>
 </Window>
