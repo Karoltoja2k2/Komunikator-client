@@ -27,7 +27,7 @@ namespace Client.Windows
         private const int BUFFER_SIZE = 2048;
         private static readonly byte[] buffer = new byte[BUFFER_SIZE];
 
-        public LoginWindow()
+      public LoginWindow()
         {
             InitializeComponent();
         }

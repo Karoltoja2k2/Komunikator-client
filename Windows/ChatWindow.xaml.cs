@@ -20,7 +20,7 @@ namespace Client.Windows
     public partial class ChatWindow : Window
     {
         private byte[] buffer;
-        private Message msgObj;
+        private Order msgObj;
 
 
         public ChatWindow()
@@ -35,7 +35,7 @@ namespace Client.Windows
                 string msg = messageInput.Text;
                 if (!String.IsNullOrEmpty(msg))
                 {
-                    msgObj = new Message(125125, 1251251, msg, DateTime.Now);
+                    msgObj = new Order(MainWindow.userAcc.token, 125125, 1251251, msg, DateTime.Now);
                     Serializer serializer = new Serializer();
                     byte[] buffer = serializer.Serialize_Obj(msgObj);
 

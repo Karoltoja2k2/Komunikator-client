@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -25,6 +26,8 @@ namespace Client.Windows
         public static User userAcc;
         public int BUFFER_SIZE = 2048;
         public byte[] buffer = new byte[2048];
+
+        public static Serializer serializer = new Serializer();
 
         public MainWindow(Socket connetion, User connectedUser)
         {
