@@ -9,5 +9,6 @@
     <Grid>
         <Button Content="Send message" HorizontalAlignment="Left" Margin="656,319,0,0" VerticalAlignment="Top" Width="126" Click="Send_Msg" Height="90"/>
         <TextBox Name="messageInput" HorizontalAlignment="Left" TextWrapping="Wrap" Width="641" Margin="10,319,0,0" Height="90" VerticalAlignment="Top" />
+        <TextBox Name ="receiverNrInput" HorizontalAlignment="Left" Height="22" Margin="180,92,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" />
     </Grid>
 </Window>

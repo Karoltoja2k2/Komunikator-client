@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 [Serializable]
 public class Order
 {
+    public enum OrderType
+    {
+        Message, FriendRequest
+    }
+
+    public int orderType;
     public string token;
     public int sender;
     public int receiver;
@@ -21,8 +27,9 @@ public class Order
     /// <summary>
     /// Send message to another client(receiver)
     /// </summary>
-    public Order(string token, int sender, int receiver, string message, DateTime timeSend)
+    public Order(int orderType, string token, int sender, int receiver, string message, DateTime timeSend)
     {
+        this.orderType = orderType;
         this.token = token;
         this.sender = sender;
         this.receiver = receiver;
@@ -32,8 +39,9 @@ public class Order
     /// <summary>
     /// Send friend request to another user(receiver)
     /// </summary>
-    public Order(string token, int sender, int receiver, DateTime timeSend)
+    public Order(int orderType, string token, int sender, int receiver, DateTime timeSend)
     {
+        this.orderType = orderType;
         this.token = token;
         this.sender = sender;
         this.receiver = receiver;

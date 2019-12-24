@@ -34,7 +34,26 @@ namespace Client.Windows
 
         private void Register(object sender, RoutedEventArgs e)
         {
-            // registration logic
+            string nr = number.Text;
+            string eMail = email.Text;
+            string p1 = password1.Password;
+            string p2 = password2.Password;
+            bool agr = (bool)agreement.IsChecked;
+
+            if (eMail.Contains("@") && p1 == p2 && agr == true)
+            {
+                using (System.IO.StreamWriter file =
+                    new System.IO.StreamWriter(@"C:\Users\Karol\Desktop\C#\Komunikator\Client\accounts.txt", true))
+                {
+                    file.WriteLine($"{nr};{eMail};{p1}");
+                }
+            }
+            else
+            {
+                // highlight wrong fields
+                return;
+            }
+
 
             LoginWindow window = new LoginWindow();
             UiControl.ChangeWindow(this, window);

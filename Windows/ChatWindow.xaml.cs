@@ -20,8 +20,6 @@ namespace Client.Windows
     public partial class ChatWindow : Window
     {
         private byte[] buffer;
-        private Order msgObj;
-
 
         public ChatWindow()
         {
@@ -33,16 +31,22 @@ namespace Client.Windows
             if (MainWindow.socket != null)
             {
                 string msg = messageInput.Text;
+                string rcvNr = receiverNrInput.Text;
+                int receiver = Int32.Parse(rcvNr);
+
+
                 if (!String.IsNullOrEmpty(msg))
                 {
-                    msgObj = new Order(MainWindow.userAcc.token, 125125, 1251251, msg, DateTime.Now);
+                    Order msgToSend = new Order(0, MainWindow.userAcc.token, MainWindow.userAcc.accNumber, receiver, msg, DateTime.Now);
                     Serializer serializer = new Serializer();
-                    byte[] buffer = serializer.Serialize_Obj(msgObj);
+                    buffer = serializer.Serialize_Obj(msgToSend);
 
                     MainWindow.socket.Send(buffer, 0, buffer.Length, 0);
                     messageInput.Text = "";
                 }
             }
         }
+
+
     }
 }
