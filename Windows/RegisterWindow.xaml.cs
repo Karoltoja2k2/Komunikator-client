@@ -23,13 +23,13 @@ namespace Client.Windows
         public RegisterWindow()
         {
             InitializeComponent();
+            number.Text = RandomNumber();
         }
 
         private void BackToLogin(object sender, RoutedEventArgs e)
         {
             LoginWindow window = new LoginWindow();
             UiControl.ChangeWindow(this, window);
-
         }
 
         private void Register(object sender, RoutedEventArgs e)
@@ -38,7 +38,24 @@ namespace Client.Windows
 
             LoginWindow window = new LoginWindow();
             UiControl.ChangeWindow(this, window);
+        }
 
+        private void NewNumber(object sender, RoutedEventArgs e)
+        {
+            number.Text = RandomNumber();
+        }
+
+        private string RandomNumber()
+        {
+            var chars = "0123456789";
+            var stringChars = new char[8];
+            var random = new Random();
+
+            for (int i = 0; i < stringChars.Length; i++)
+            {
+                stringChars[i] = chars[random.Next(chars.Length)];
+            }
+            return new String(stringChars);
         }
     }
 }

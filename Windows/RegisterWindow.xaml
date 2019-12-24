@@ -8,7 +8,8 @@
         Title="Rejestracja" Height="450" Width="400">
     <Grid>
         <TextBlock HorizontalAlignment="Left" Margin="99,60,0,0" TextWrapping="Wrap" Text="Numer" VerticalAlignment="Top" Height="23" Width="196"/>
-        <TextBox Name="number" HorizontalAlignment="Left" Height="23" Margin="99,83,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="196"/>
+        <TextBox Name="number" IsEnabled="False" HorizontalAlignment="Left" Height="23" Margin="99,83,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="196"/>
+        <Button Content="#" HorizontalAlignment="Left" Margin="274,83,0,0" VerticalAlignment="Top" Width="21" Height="23" Click="NewNumber"/>
         <TextBlock HorizontalAlignment="Left" Margin="99,111,0,0" TextWrapping="Wrap" Text="E-mail" VerticalAlignment="Top" Height="23" Width="196"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="99,134,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="196"/>
         <TextBlock HorizontalAlignment="Left" Margin="99,162,0,0" TextWrapping="Wrap" Text="Hasło" VerticalAlignment="Top" Height="23" Width="55"/>
@@ -16,8 +17,8 @@
         <TextBlock HorizontalAlignment="Left" Margin="99,213,0,0" TextWrapping="Wrap" Text="Powtórz hasło" VerticalAlignment="Top" Height="23" Width="196"/>
         <PasswordBox HorizontalAlignment="Left" Margin="99,236,0,0" VerticalAlignment="Top" Width="196" Height="23"/>
         <CheckBox Content="Akceptuję regulamin" HorizontalAlignment="Left" Margin="99,264,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,1.448" Width="196"/>
-        <Button Content="Kontynuuj" HorizontalAlignment="Left" Margin="220,323,0,0" VerticalAlignment="Top" Width="75" Click="Register"/>
-        <Button Content="Logowanie" HorizontalAlignment="Left" Margin="99,323,0,0" VerticalAlignment="Top" Width="75" Click="BackToLogin"/>
+        <Button Content="Rejestruj" HorizontalAlignment="Left" Margin="100,290,0,0" VerticalAlignment="Top" Width="195" Click="Register"/>
+        <Button Content="Powrót do logowania" HorizontalAlignment="Left" Margin="100,342,0,0" VerticalAlignment="Top" Width="195" Click="BackToLogin"/>
 
     </Grid>
 </Window>

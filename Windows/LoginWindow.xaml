@@ -8,11 +8,11 @@
         Title="LoginWindow" Height="450" Width="400">
     <Grid>
         <TextBlock HorizontalAlignment="Left" Margin="99,154,0,0" TextWrapping="Wrap" Text="Numer" VerticalAlignment="Top" Height="23" Width="55"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="99,177,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="196"/>
+        <TextBox Name="numberInput" MaxLength="8" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="23" Margin="99,177,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="196"/>
         <TextBlock HorizontalAlignment="Left" Margin="99,205,0,0" TextWrapping="Wrap" Text="Hasło" VerticalAlignment="Top" Height="23" Width="55"/>
         <PasswordBox HorizontalAlignment="Left" Margin="99,228,0,0" VerticalAlignment="Top" Width="196" Height="23"/>
         <CheckBox Content="Nie wylogowywuj" HorizontalAlignment="Left" Margin="99,256,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,1.448"/>
-        <Button Content="Zaloguj" HorizontalAlignment="Left" Margin="220,288,0,0" VerticalAlignment="Top" Width="75" Click="Login"/>
+        <Button Content="Zaloguj" Name="loginButton" HorizontalAlignment="Left" Margin="220,288,0,0" VerticalAlignment="Top" Width="75" Click="Login"/>
 
         <TextBlock Name="alertText" HorizontalAlignment="Left" Margin="99,340,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="227"/>
 

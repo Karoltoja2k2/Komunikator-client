@@ -20,6 +20,7 @@ namespace Client.Windows
     public partial class ChatWindow : Window
     {
         private byte[] buffer;
+        private Message msgObj;
 
 
         public ChatWindow()
@@ -34,7 +35,10 @@ namespace Client.Windows
                 string msg = messageInput.Text;
                 if (!String.IsNullOrEmpty(msg))
                 {
-                    buffer = Encoding.Default.GetBytes(msg);
+                    msgObj = new Message(125125, 1251251, msg, DateTime.Now);
+                    Serializer serializer = new Serializer();
+                    byte[] buffer = serializer.Serialize_Obj(msgObj);
+
                     MainWindow.socket.Send(buffer, 0, buffer.Length, 0);
                     messageInput.Text = "";
                 }

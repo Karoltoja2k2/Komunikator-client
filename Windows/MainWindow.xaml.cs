@@ -22,27 +22,59 @@ namespace Client.Windows
     {
         
         public static Socket socket;
+        public static User userAcc;
+        public int BUFFER_SIZE = 2048;
+        public byte[] buffer = new byte[2048];
 
-        public MainWindow(Socket connetion)
+        public MainWindow(Socket connetion, User connectedUser)
         {
+            userAcc = connectedUser;
             socket = connetion;
+            socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, receiveCallBack, socket);
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void receiveCallBack(IAsyncResult AR)
+        {
+            Socket socket = (Socket)AR.AsyncState;
+            int received;
+            try
+            {
+                received = socket.EndReceive(AR);
+            }
+            catch (SocketException) { return; }
+            catch (ObjectDisposedException) { return; }
+            
+
+            byte[] recBuf = new byte[received];
+            Array.Copy(buffer, recBuf, received);
+            string text = Encoding.ASCII.GetString(recBuf);
+            receiveBlockTest.Dispatcher.Invoke(new Action(() => receiveBlockTest.Text = text));
+        
+            socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, receiveCallBack, socket);
+        }
+
+        private void changeText(string str)
+        {
+            receiveBlockTest.Text = str;
+        }
+
+        private void openConvButton(object sender, RoutedEventArgs e)
         {
             ChatWindow window = new ChatWindow();
+            window.Owner = this;
             UiControl.OpenWindow(this, window);
 
         }
 
-        private void Button_Click1(object sender, RoutedEventArgs e)
+        private void logoutButton(object sender, RoutedEventArgs e)
         {
             socket.Close();
             LoginWindow window = new LoginWindow();
             UiControl.ChangeWindow(this, window);
 
         }
+
     }
 }
 
