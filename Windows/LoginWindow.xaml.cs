@@ -87,6 +87,5 @@ namespace Client.Windows
             UiControl.ChangeWindow(this, window);
         }
 
-
     }
 }

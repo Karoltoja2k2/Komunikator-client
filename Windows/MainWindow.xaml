@@ -9,7 +9,7 @@
     <Grid>
         <Button Content="Konwersacja" HorizontalAlignment="Left" Margin="72,49,0,0" VerticalAlignment="Top" Width="75" Click="openConvButton"/>
         <Button Content="Wyloguj" HorizontalAlignment="Left" Margin="707,49,0,0" VerticalAlignment="Top" Width="75" Click="logoutButton"/>
-        <TextBlock Name="numberText" HorizontalAlignment="Left" Margin="707,15,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="74" Height="29">
+        <TextBlock x:Name="numberText" HorizontalAlignment="Left" Margin="707,15,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="74" Height="29">
             <TextBlock.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -17,9 +17,14 @@
                     <RotateTransform Angle="0.07"/>
                     <TranslateTransform/>
                 </TransformGroup>
-            </TextBlock.RenderTransform>
-        </TextBlock>
-        <TextBlock Name="receiveBlockTest" HorizontalAlignment="Left" Margin="185,169,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="125" Width="445"/>
+            </TextBlock.RenderTransform><InlineUIContainer>
+                <TextBlock Name="accNumberBlock" Height="23" TextWrapping="Wrap" Width="120"/>
+            </InlineUIContainer></TextBlock>
+        <TextBlock Name="receiveBlockTest" HorizontalAlignment="Left" Margin="10,284,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="125" Width="445"/>
+        <TextBox Name="searchInput" MaxLength="8" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="23" Margin="474,160,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+
+        <Button Content="?" HorizontalAlignment="Left" Margin="594,160,0,0" VerticalAlignment="Top" Width="25" Height="23" Click="searchUsersButton"/>
+        <TextBlock Name="searchResults" HorizontalAlignment="Left" Margin="474,188,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="67" Width="145"/>
 
     </Grid>
 </Window>

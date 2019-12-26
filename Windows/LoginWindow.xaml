@@ -5,23 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client.Windows"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="450" Width="400">
+        Title="GaduGadu" Height="500" Width="400" MinWidth="200" MinHeight="300" MaxWidth="600" MaxHeight="700">
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="99,154,0,0" TextWrapping="Wrap" Text="Numer" VerticalAlignment="Top" Height="23" Width="55"/>
-        <TextBox Name="numberInput" MaxLength="8" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="23" Margin="99,177,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="196"/>
-        <TextBlock HorizontalAlignment="Left" Margin="99,205,0,0" TextWrapping="Wrap" Text="Hasło" VerticalAlignment="Top" Height="23" Width="55"/>
-        <PasswordBox HorizontalAlignment="Left" Margin="99,228,0,0" VerticalAlignment="Top" Width="196" Height="23"/>
-        <CheckBox Content="Nie wylogowywuj" HorizontalAlignment="Left" Margin="99,256,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,1.448"/>
-        <Button Content="Zaloguj" Name="loginButton" HorizontalAlignment="Left" Margin="220,288,0,0" VerticalAlignment="Top" Width="75" Click="Login"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
 
-        <TextBlock Name="alertText" HorizontalAlignment="Left" Margin="99,340,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="227"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
 
-        <TextBlock HorizontalAlignment="Left" Margin="48,393,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="321">     
-            Jeśli nie masz jeszcze konta możesz sie 
-            <Hyperlink Click="RegistrationPage">
-                zarejestrować
-            </Hyperlink>
-        </TextBlock>
+
+        </Grid.RowDefinitions>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+
+            <StackPanel>
+                <StackPanel>
+                    <Image Name="loginLogo" Margin="5" HorizontalAlignment="Stretch" Source="C:\Users\Karol\Desktop\C#\Komunikator\Client\Resources\logo.png" Height="150" Width="150"></Image>
+                </StackPanel>
+                <StackPanel Background="LightGray" VerticalAlignment="Stretch">
+                    <TextBlock  Margin="25,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Width="auto" TextWrapping="Wrap" Text="Numer" />
+                    <TextBox  Margin="10,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Name="numberInput" MaxLength="8" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Height="30" />
+                    <TextBlock HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Hasło" VerticalAlignment="Top" Width="Auto" Margin="25,0,10,0"/>
+                    <PasswordBox HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="30" Margin="10,0"/>
+                    <CheckBox Content="Nie wylogowywuj" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="25,5,10,0" />
+                    <Button Name="loginButton" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="Login" Margin="10,15,10,0" Height="25">
+                        <TextBlock Text="Zaloguj" HorizontalAlignment="Center" Foreground="Black" Width="auto"/>
+
+                    </Button>
+                    <TextBlock Text="---- LUB ----" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="Gray" Width="Auto" RenderTransformOrigin="0.361,0.438"/>
+                    <Button Background="CornflowerBlue" Name="registerButton" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="RegistrationPage" Margin="10,0,10,5" Height="25">
+                        <TextBlock Text="Załóż konto" HorizontalAlignment="Center" Foreground="Black" Width="auto"/>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Margin="0,25,0,0">
+                    <TextBlock Name="alertText" Foreground="Coral" TextAlignment="Center" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
 
     </Grid>
 

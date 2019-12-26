@@ -6,9 +6,36 @@
         xmlns:local="clr-namespace:Client.Windows"
         mc:Ignorable="d"
         Title="ChatWindow" Height="450" Width="800">
+
     <Grid>
-        <Button Content="Send message" HorizontalAlignment="Left" Margin="656,319,0,0" VerticalAlignment="Top" Width="126" Click="Send_Msg" Height="90"/>
-        <TextBox Name="messageInput" HorizontalAlignment="Left" TextWrapping="Wrap" Width="641" Margin="10,319,0,0" Height="90" VerticalAlignment="Top" />
-        <TextBox Name ="receiverNrInput" HorizontalAlignment="Left" Height="22" Margin="180,92,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="1*" />
+
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="1*"/>
+
+        </Grid.RowDefinitions>
+
+        <Canvas Background="DodgerBlue" Grid.RowSpan="2" Grid.ColumnSpan="2" />
+
+
+        <StackPanel Background="Coral" Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+
+
+        <TextBox Background="GhostWhite" Grid.Row="1" Grid.Column="0" Name="messageInput" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" Margin="5" />
+        <Button Background="GhostWhite" Grid.Row="1" Grid.Column="1" Content="Send message" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Send_Msg" Margin="5"/>
+
+        <TextBox Name ="receiverNrInput" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Stretch" Width="Auto" Grid.Row="0" Grid.Column="1" Margin="5,10,5,5"/>
+        <ScrollViewer Background="White" Grid.Row="0" Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+
+            <StackPanel Name="msgStackPanel" Orientation="Vertical">
+
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
+
 </Window>

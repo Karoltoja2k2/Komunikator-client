@@ -38,15 +38,22 @@ namespace Client.Windows
                 if (!String.IsNullOrEmpty(msg))
                 {
                     Order msgToSend = new Order(0, MainWindow.userAcc.token, MainWindow.userAcc.accNumber, receiver, msg, DateTime.Now);
+
                     Serializer serializer = new Serializer();
                     buffer = serializer.Serialize_Obj(msgToSend);
 
                     MainWindow.socket.Send(buffer, 0, buffer.Length, 0);
+
+                    TextBlock txtblock = new TextBlock();
+                    txtblock.Text = msgToSend.message;
+                    txtblock.Style = MainWindow.msgStyle;
+                    txtblock.HorizontalAlignment = HorizontalAlignment.Right;
+                    msgStackPanel.Children.Add(txtblock);
+
                     messageInput.Text = "";
                 }
             }
         }
-
 
     }
 }
