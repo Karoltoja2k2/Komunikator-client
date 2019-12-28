@@ -34,29 +34,91 @@ namespace Client.Windows
 
         private void Register(object sender, RoutedEventArgs e)
         {
+            bool valid = true;
             string nr = number.Text;
             string eMail = email.Text;
             string p1 = password1.Password;
             string p2 = password2.Password;
             bool agr = (bool)agreement.IsChecked;
 
-            if (eMail.Contains("@") && p1 == p2 && agr == true)
+            if (!eMail.Contains("@"))
+            {
+                valid = false;
+                email.BorderBrush = Brushes.Red;
+            }
+            else
+            {
+                email.BorderBrush = Brushes.Green;
+            }
+
+            if (p1 != p2)
+            {
+                valid = false;
+                password1.BorderBrush = Brushes.Red;
+                password2.BorderBrush = Brushes.Red;
+            }
+            else
+            {
+                password1.BorderBrush = Brushes.Green;
+                password2.BorderBrush = Brushes.Green;
+            }
+
+            if (passwordValidation(p1) == false | passwordValidation(p2) == false)
+            {
+                valid = false;
+                password1.BorderBrush = Brushes.Red;
+                password2.BorderBrush = Brushes.Red;
+            }
+            else
+            {
+                password1.BorderBrush = Brushes.Green;
+                password2.BorderBrush = Brushes.Green;
+            }
+
+            if (agr != true)
+            {
+                valid = false;
+                agreement.BorderBrush = Brushes.Red;
+            }
+            else
+            {
+                agreement.BorderBrush = Brushes.Green;
+            }
+
+            if (valid)
             {
                 using (System.IO.StreamWriter file =
                     new System.IO.StreamWriter(@"C:\Users\Karol\Desktop\C#\Komunikator\Client\accounts.txt", true))
                 {
                     file.WriteLine($"{nr};{eMail};{p1}");
+                    
+                    LoginWindow window = new LoginWindow();
+                    UiControl.ChangeWindow(this, window);
                 }
             }
             else
             {
-                // highlight wrong fields
-                return;
+                alertText.Text = "Popraw lub uzupełnij czerwone pola, skorzystaj z podpowiedzi wskazując myszką na pole";
             }
 
 
-            LoginWindow window = new LoginWindow();
-            UiControl.ChangeWindow(this, window);
+        }
+
+        private bool passwordValidation(string password)
+        {
+            string validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            if (password.Length <= 8)
+                return false;
+
+            foreach (char character in password)
+            {
+                if (!validChars.Contains(character))
+                    return false;
+            }
+
+            return true;
+
         }
 
         private void NewNumber(object sender, RoutedEventArgs e)

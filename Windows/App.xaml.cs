@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.Windows;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,13 @@ namespace Client
     /// </summary>
     public partial class App : Application
     {
+        private void Application_Exit(object sender, EventArgs e)
+        {
+            for (int intCounter = App.Current.Windows.Count - 1; intCounter >= 0; intCounter--)
+                App.Current.Windows[intCounter].Close();
+        }
+
     }
+    
+
 }

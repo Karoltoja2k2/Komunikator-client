@@ -21,8 +21,8 @@ namespace Client.Windows
             toOpen.Top = loc.Y;
             toOpen.Left = loc.X;
             App.Current.MainWindow = toOpen;
-            open.Close();
             toOpen.Show();
+            open.Close();
         }
 
         public static void OpenWindow(Window open, Window toOpen)

@@ -5,20 +5,64 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client.Windows"
         mc:Ignorable="d"
-        Title="Rejestracja" Height="450" Width="400">
+        Title="Rejestracja" Height="500" Width="400" MinWidth="200" MinHeight="300" MaxWidth="600" MaxHeight="700">
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="99,60,0,0" TextWrapping="Wrap" Text="Numer" VerticalAlignment="Top" Height="23" Width="196"/>
-        <TextBox Name="number" IsEnabled="False" HorizontalAlignment="Left" Height="23" Margin="99,83,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="196"/>
-        <Button Content="#" HorizontalAlignment="Left" Margin="274,83,0,0" VerticalAlignment="Top" Width="21" Height="23" Click="NewNumber"/>
-        <TextBlock HorizontalAlignment="Left" Margin="99,111,0,0" TextWrapping="Wrap" Text="E-mail" VerticalAlignment="Top" Height="23" Width="196"/>
-        <TextBox Name="email" HorizontalAlignment="Left" Height="23" Margin="99,134,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="196"/>
-        <TextBlock HorizontalAlignment="Left" Margin="99,162,0,0" TextWrapping="Wrap" Text="Hasło" VerticalAlignment="Top" Height="23" Width="55"/>
-        <PasswordBox Name="password1" HorizontalAlignment="Left" Margin="99,185,0,0" VerticalAlignment="Top" Width="196" Height="23"/>
-        <TextBlock HorizontalAlignment="Left" Margin="99,213,0,0" TextWrapping="Wrap" Text="Powtórz hasło" VerticalAlignment="Top" Height="23" Width="196"/>
-        <PasswordBox Name="password2" HorizontalAlignment="Left" Margin="99,236,0,0" VerticalAlignment="Top" Width="196" Height="23"/>
-        <CheckBox Name="agreement" Content="Akceptuję regulamin" HorizontalAlignment="Left" Margin="99,264,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,1.448" Width="196"/>
-        <Button Content="Rejestruj" HorizontalAlignment="Left" Margin="100,290,0,0" VerticalAlignment="Top" Width="195" Click="Register"/>
-        <Button Content="Powrót do logowania" HorizontalAlignment="Left" Margin="100,342,0,0" VerticalAlignment="Top" Width="195" Click="BackToLogin"/>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+
+
+        </Grid.RowDefinitions>
+
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+
+            <StackPanel Name="firstStep">
+                <Label HorizontalAlignment="Center" FontSize="28">Rejestracja</Label>
+
+                <StackPanel Background="LightGray" VerticalAlignment="Stretch">
+
+                    <TextBlock  Margin="25,10,10,2" VerticalAlignment="Top" HorizontalAlignment="Stretch" Width="auto" TextWrapping="Wrap" Text="Numer" 
+                                 ToolTip="To twój unikalny numer, użyj przycisku po prawej aby wylosować nowy"/>
+                    <DockPanel LastChildFill="True">
+                        <Button Content="#" DockPanel.Dock="Right"  VerticalAlignment="Top" Width="25" Height="30" Margin="0,0,10,0" Click="NewNumber"/>
+                        <TextBox Name="number" IsEnabled="False" DockPanel.Dock="Right" Width="Auto" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="30" Margin="10,0,-1,0" TextWrapping="Wrap" VerticalAlignment="Top" />
+                    </DockPanel>
+
+                    <TextBlock HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Email" VerticalAlignment="Top" Width="Auto" Margin="25,5,10,2"
+                               ToolTip="Adres e-mail musi zawierać znak '@', na podany adres zostanie wysłany kod aktywacyjny!"/>
+                    <TextBox Name="email" HorizontalAlignment="Stretch" Height="30" Margin="10,0,10,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+
+                    <TextBlock HorizontalAlignment="Left" Margin="25,5,10,2" TextWrapping="Wrap" Text="Hasło" VerticalAlignment="Top"
+                               ToolTip="Dostępne znaki a-z, A-Z, 0-9. Twoje hasło musi zawierać minimum 8 znaków"/>
+                    <PasswordBox Name="password1" HorizontalAlignment="Stretch" Margin="10,0,10,0" VerticalAlignment="Top" Height="30" VerticalContentAlignment="Center"/>
+
+                    <TextBlock HorizontalAlignment="Left" Margin="25,5,10,2" TextWrapping="Wrap" Text="Powtórz hasło" VerticalAlignment="Top"
+                               ToolTip="Wpisz hasło ponownie"/>
+                    <PasswordBox Name="password2" HorizontalAlignment="Stretch" Margin="10,0,10,0" VerticalAlignment="Top" Height="30" VerticalContentAlignment="Center"/>
+
+                    <CheckBox Name="agreement" Content="Akceptuję regulamin" HorizontalAlignment="Left" Margin="25,5,0,0" VerticalAlignment="Top"/>
+
+                    <Button HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="Register" Margin="10,15,10,0" Height="25">
+                        <TextBlock Text="Kontynuuj" HorizontalAlignment="Center" Foreground="Black" Width="auto"/>
+                    </Button>
+
+                    <TextBlock Text="---- LUB ----" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="Gray" Width="Auto" Margin="0,5"/>
+                    <Button Background="CornflowerBlue" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="BackToLogin" Margin="10,0,10,10" Height="25">
+                        <TextBlock Text="Zaloguj" HorizontalAlignment="Center" Foreground="Black" Width="auto"/>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Margin="0,15,0,0">
+                    <TextBlock Name="alertText" Foreground="Coral" TextAlignment="Center" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
 
     </Grid>
+
+
 </Window>

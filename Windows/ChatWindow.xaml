@@ -23,13 +23,14 @@
         <Canvas Background="DodgerBlue" Grid.RowSpan="2" Grid.ColumnSpan="2" />
 
 
-        <StackPanel Background="Coral" Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+        <StackPanel Background="Coral" Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <TextBlock HorizontalAlignment="Center">You are talking with</TextBlock>
+            <TextBlock Name="recvNumber" HorizontalAlignment="Center"></TextBlock>
+        </StackPanel>
 
 
         <TextBox Background="GhostWhite" Grid.Row="1" Grid.Column="0" Name="messageInput" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" Margin="5" />
         <Button Background="GhostWhite" Grid.Row="1" Grid.Column="1" Content="Send message" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Send_Msg" Margin="5"/>
-
-        <TextBox Name ="receiverNrInput" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Stretch" Width="Auto" Grid.Row="0" Grid.Column="1" Margin="5,10,5,5"/>
         <ScrollViewer Background="White" Grid.Row="0" Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
 
             <StackPanel Name="msgStackPanel" Orientation="Vertical">

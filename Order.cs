@@ -24,6 +24,7 @@ public class Order
     {
 
     }
+
     /// <summary>
     /// Send message to another client(receiver)
     /// </summary>
@@ -36,8 +37,9 @@ public class Order
         this.message = message;
         this.timeSend = timeSend;
     }
+
     /// <summary>
-    /// Send friend request to another user(receiver)
+    /// Send friend request to another user(receiver) if orderType == 1, or accept friend request if ordertype == 2
     /// </summary>
     public Order(int orderType, string token, int sender, int receiver, DateTime timeSend)
     {
