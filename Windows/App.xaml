@@ -15,7 +15,11 @@
             <Setter Property="Background" Value="AntiqueWhite"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="IsReadOnly" Value="True"/>
-
         </Style>
+
+
+
+
+
     </Application.Resources>
 </Application>

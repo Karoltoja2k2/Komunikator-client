@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,39 +11,35 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Client.Windows;
 
-namespace Client.Windows
+namespace Client.Pages
 {
     /// <summary>
-    /// Logika interakcji dla klasy RegisterWindow.xaml
+    /// Logika interakcji dla klasy LogPage2.xaml
     /// </summary>
-    public partial class RegisterWindow : Window
+    public partial class LogPage2 : Page
     {
+        private static Window parentWin;
+        public Socket socket;
 
-        public RegisterWindow()
+        private const int BUFFER_SIZE = 2048;
+        private static readonly byte[] buffer = new byte[BUFFER_SIZE];
+        public Serializer serializer = new Serializer();
+
+        public LogPage2(Window parent, Socket socketParam)
         {
+            this.socket = socketParam;
+            parentWin = parent;
             InitializeComponent();
-            Loaded += Mywindow_Loaded;
             number.Text = RandomNumber();
-        }
-
-        private void Mywindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            // NavigationService.Navigate(registrationPage1);
-        }
-
-        private void BackToLogin(object sender, RoutedEventArgs e)
-        {
-            LoginWindow window = new LoginWindow();
-            UiControl.ChangeWindow(this, window);
         }
 
         private void Register(object sender, RoutedEventArgs e)
         {
             bool valid = true;
-            string nr = number.Text;
+            int nr = Int32.Parse(number.Text);
             string eMail = email.Text;
             string p1 = password1.Password;
             string p2 = password2.Password;
@@ -94,14 +91,18 @@ namespace Client.Windows
 
             if (valid)
             {
-                using (System.IO.StreamWriter file =
-                    new System.IO.StreamWriter(@"C:\Users\Karol\Desktop\C#\Komunikator\Client\accounts.txt", true))
-                {
-                    file.WriteLine($"{nr};{eMail};{p1}");
-                    
-                    LoginWindow window = new LoginWindow();
-                    UiControl.ChangeWindow(this, window);
-                }
+                Order order = new Order(4, nr, eMail, p1);
+                byte[] sendBuff = serializer.Serialize_Obj(order);
+                socket.Send(sendBuff, sendBuff.Length, 0);
+
+                byte[] recBuff = new byte[2048];
+                socket.Receive(recBuff, recBuff.Length, 0);
+                User response = (User)serializer.Deserialize_Obj(recBuff, new User());
+                if (response.accNumber == order.sender)
+                    NavigationService.GoBack();
+                else
+                    alertText.Text = "Rejestracja się nie udała i w sumie nie wiem czemu xD";
+
             }
             else
             {
@@ -144,6 +145,11 @@ namespace Client.Windows
                 stringChars[i] = chars[random.Next(chars.Length)];
             }
             return new String(stringChars);
+        }
+
+        private void LoginPage(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
         }
     }
 }

@@ -9,31 +9,19 @@ using System;
 
 public class Serializer
 {
-    // public byte[] Serialize_Obj(object toSerialize)
-    // {
-    //     if (toSerialize == null)
-    //     {
-    //         return null;
-    //     }
-    //     var bF = new BinaryFormatter();
-    //     using (var memoryStream = new MemoryStream())
-    //     {
-    //         bF.Serialize(memoryStream, toSerialize);
-    //         return memoryStream.ToArray();
-    //     }
-    // }
-    // 
-    // public T Deserialize_Obj<T>(byte[] toDeserialize)
-    // {
-    //     using (var memoryStream = new MemoryStream())
-    //     {
-    //         var bF = new BinaryFormatter();
-    //         memoryStream.Write(toDeserialize, 0, toDeserialize.Length);
-    //         memoryStream.Seek(0, SeekOrigin.Begin);
-    //         T obj = (T)bF.Deserialize(memoryStream);
-    //         return obj;
-    //     }
-    // }
+    public Order orderType;
+    public Type[] extraTypes;
+
+    public Serializer()
+    {
+        extraTypes = new Type[3];
+        this.orderType = new Order();
+        extraTypes[0] = new Conversation().GetType();
+        extraTypes[1] = new User().GetType();
+        extraTypes[2] = new Order().GetType();
+
+
+    }
 
     public byte[] Serialize_Obj(object toSerialize)
     {
@@ -53,7 +41,7 @@ public class Serializer
     public object Deserialize_Obj(byte[] toDeserialize, object type)
     {
         MemoryStream ms = new MemoryStream(toDeserialize);
-        XmlSerializer xmlSerializer = new XmlSerializer(type.GetType(), "");
+        XmlSerializer xmlSerializer = new XmlSerializer(type.GetType(), extraTypes);
         object testObj = xmlSerializer.Deserialize(ms);
 
         return testObj;

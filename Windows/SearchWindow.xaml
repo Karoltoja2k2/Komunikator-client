@@ -26,7 +26,7 @@
             <TextBox Height="30" Name="search1"></TextBox>
             
             <Label>Numer telefonu lub email</Label>
-            <TextBox Height="30" Name="search2"></TextBox>
+            <TextBox  Height="30" Name="search2"></TextBox>
 
             <DockPanel Margin="0,10">
                 <Button Margin="5,0,0,0" DockPanel.Dock="Right" Width="70" Click="declineButton">Anuluj</Button>
@@ -34,10 +34,10 @@
                 <Button Margin="0,0,5,0" Background="Green" DockPanel.Dock="Right" Click="searchButtonClick">Szukaj</Button>
             </DockPanel>
             <Label HorizontalAlignment="Center">_____________________________________________</Label>
+            <TextBlock HorizontalAlignment="Center" Name="resultCounter">Brak wyników</TextBlock>
 
             <ScrollViewer VerticalScrollBarVisibility="Hidden"  HorizontalAlignment="Center" >
                 <StackPanel Name="resultStackPanel" Margin="0,0,0,0" Orientation="Vertical" HorizontalAlignment="Center">
-                    <TextBlock Name="resultCounter">Brak wyników</TextBlock>
                 </StackPanel>
             </ScrollViewer>
             

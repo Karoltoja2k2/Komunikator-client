@@ -1,13 +1,14 @@
-﻿<Window x:Class="Client.Windows.RegisterWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Client.Windows"
-        mc:Ignorable="d"
-        Title="Rejestracja" Height="500" Width="400" MinWidth="200" MinHeight="300" MaxWidth="600" MaxHeight="700">
-    <Grid>
+﻿<Page x:Class="Client.Pages.LogPage2"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Client.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="500" d:DesignWidth="400"
+      Title="LogPage2">
 
+    <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Hidden" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
 
             <StackPanel Name="firstStep">
@@ -41,7 +42,7 @@
                     </Button>
 
                     <TextBlock Text="---- LUB ----" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="Gray" Width="Auto" Margin="0,5"/>
-                    <Button Background="CornflowerBlue" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="BackToLogin" Margin="10,0,10,10" Height="25">
+                    <Button Background="CornflowerBlue" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="LoginPage" Margin="10,0,10,10" Height="25">
                         <TextBlock Text="Zaloguj" HorizontalAlignment="Center" Foreground="Black" Width="auto"/>
                     </Button>
                 </StackPanel>
@@ -51,8 +52,5 @@
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
-
     </Grid>
-
-
-</Window>
+</Page>

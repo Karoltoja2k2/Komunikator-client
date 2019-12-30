@@ -59,7 +59,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Conversation.cs" />
     <Compile Include="Order.cs" />
+    <Compile Include="Pages\LoadingPage.xaml.cs">
+      <DependentUpon>LoadingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\LogPage1.xaml.cs">
+      <DependentUpon>LogPage1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\LogPage2.xaml.cs">
+      <DependentUpon>LogPage2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\friendListElem.xaml.cs">
+      <DependentUpon>friendListElem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Serializer.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Windows\ChatWindow.xaml.cs">
@@ -82,6 +95,22 @@
       <DependentUpon>SearchWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\UiControl.cs" />
+    <Page Include="Pages\LoadingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\LogPage1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\LogPage2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\friendListElem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\ChatWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

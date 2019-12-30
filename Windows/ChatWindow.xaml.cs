@@ -20,13 +20,19 @@ namespace Client.Windows
     public partial class ChatWindow : Window
     {
         private byte[] buffer;
-        private int recv;
+        public Conversation conv;
 
-        public ChatWindow(int receiver)
+        public ChatWindow(Conversation conv)
         {
-            this.recv = receiver;
+            this.conv = conv;
             InitializeComponent();
-            recvNumber.Text = $"{recv}";
+
+            foreach (Order msg in conv.messages)
+            {
+                renderMessage(msg);
+            }
+
+            recvNumber.Text = $"{conv.receiver}";
 
 
         }
@@ -40,23 +46,31 @@ namespace Client.Windows
 
                 if (!String.IsNullOrEmpty(msg))
                 {
-                    Order msgToSend = new Order(0, MainWindow.userAcc.token, MainWindow.userAcc.accNumber, recv, msg, DateTime.Now);
+                    Order msgToSend = new Order(0, MainWindow.userAcc.token, conv.you, conv.receiver, msg, DateTime.Now);
+                    conv.messages.Add(msgToSend);
 
                     Serializer serializer = new Serializer();
                     buffer = serializer.Serialize_Obj(msgToSend);
 
                     MainWindow.socket.Send(buffer, 0, buffer.Length, 0);
 
-                    TextBox txtbox = new TextBox();
-                    txtbox.Text = msgToSend.message;
-                    txtbox.Style = MainWindow.msgStyle;
-                    txtbox.HorizontalAlignment = HorizontalAlignment.Right;
-                    msgStackPanel.Children.Add(txtbox);
-
+                    renderMessage(msgToSend);
                     messageInput.Text = "";
                 }
             }
         }
 
+        private void renderMessage(Order msg)
+        {
+            TextBox txtbox = new TextBox();
+            txtbox.Text = msg.message;
+            txtbox.Style = MainWindow.msgStyle;
+            if (msg.sender == conv.you)
+                txtbox.HorizontalAlignment = HorizontalAlignment.Right;
+            else
+                txtbox.HorizontalAlignment = HorizontalAlignment.Left;
+
+            msgStackPanel.Children.Add(txtbox);
+        }
     }
 }

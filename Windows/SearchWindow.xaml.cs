@@ -21,10 +21,13 @@ namespace Client.Windows
     public partial class SearchWindow : Window
     {
         byte[] buffer;
+        User userAcc;
 
-        public SearchWindow()
+        public SearchWindow(User user)
         {
+            userAcc = user;
             InitializeComponent();
+            
         }
 
         // private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
@@ -57,9 +60,19 @@ namespace Client.Windows
             foreach (string account in accounts)
             {
                 string[] acc = account.Split(';');
-                if (acc[0] == searching1 | acc[0] == searching2)
-                {
-                    foundAccounts.Add(acc[0]);
+                string search = acc[0];
+                if (acc[0] != $"{userAcc.accNumber}")
+                    {
+                    if (search == searching1 | search == searching2)
+                    {
+                        foreach (Conversation conv in userAcc.conversations)
+                        {
+                             if ($"{conv.receiver}" != acc[0])
+                            {
+                                foundAccounts.Add(acc[0]);
+                            }
+                        }
+                    }
                 }
             }
 

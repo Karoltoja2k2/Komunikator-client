@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 
 [Serializable]
+[System.Xml.Serialization.XmlInclude(typeof(User))]
 public class Order
 {
     public enum OrderType
@@ -19,6 +20,10 @@ public class Order
     public int receiver;
     public string message;
     public DateTime timeSend;
+    public string password;
+    public string email;
+    public bool succes;
+    public User acc;
 
     public Order()
     {
@@ -26,7 +31,7 @@ public class Order
     }
 
     /// <summary>
-    /// Send message to another client(receiver)
+    /// Send message to another client(receiver) ORDERTYPE = 0
     /// </summary>
     public Order(int orderType, string token, int sender, int receiver, string message, DateTime timeSend)
     {
@@ -48,6 +53,48 @@ public class Order
         this.sender = sender;
         this.receiver = receiver;
         this.timeSend = timeSend;
+    }
+
+    /// <summary>
+    /// login to server ORDERYPE = 3
+    /// </summary>
+    public Order(int orderType, int sender, string password)
+    {
+        this.orderType = orderType;
+        this.sender = sender;
+        this.password = password;
+    }
+
+    /// <summary>
+    /// register ORDERTYPE = 4
+    /// </summary>
+    public Order(int orderType, int sender, string email, string password)
+    {
+        this.orderType = orderType;
+        this.sender = sender;
+        this.email = email;
+        this.password = password;
+    }
+
+    /// <summary>
+    /// response to client whether register was succesful ORDERTYPE = 5
+    /// </summary>
+    public Order(int orderType, int receiver, bool succes)
+    {
+        this.orderType = orderType;
+        this.receiver = receiver;
+        this.succes = succes;
+    }
+
+    /// <summary>
+    /// ordertype == 6, after successful login send to client his profile, if not validated send succes as false
+    /// </summary>
+    public Order(int orderType, int receiver, bool succes, User acc=null)
+    {
+        this.orderType = orderType;
+        this.receiver = receiver;
+        this.succes = succes;
+        this.acc = acc;
     }
 
 }

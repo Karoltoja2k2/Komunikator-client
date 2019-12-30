@@ -9,7 +9,7 @@
         Closing="mainOnExit">
     <Grid>
 
-        <StackPanel Orientation="Vertical" Background="Honeydew">
+        <StackPanel Orientation="Vertical" Background="Honeydew" Name="asd">
             <Button Margin="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="80">Miejsce na reklamy</Button>
             <Grid Background="DimGray" Margin="1">
                 <Grid.ColumnDefinitions>
@@ -37,8 +37,13 @@
             <TextBlock Name="searchButton" MouseEnter="searchButtonStyleFocus" MouseLeave="searchButtonStyleFocusOut" MouseDown="searchContactWindow" Margin="5" HorizontalAlignment="Center">+ Dodaj kontakty +</TextBlock>
 
             <StackPanel Name="friendsStackPanel">
-                
+                <DockPanel HorizontalAlignment="Stretch" Background="AliceBlue" Height="30" Margin="2,2,2,0">
+                    <TextBlock Text="#" Margin="15,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="numer" Margin="15,0,30,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="pseudonim" VerticalAlignment="Center"/>
+                </DockPanel>
             </StackPanel>
+
         </StackPanel>
 
 

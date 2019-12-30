@@ -14,6 +14,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Client.Pages;
+using Client.Resources;
 
 namespace Client.Windows
 {
@@ -40,9 +42,14 @@ namespace Client.Windows
             socket = connetion;
             socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, receiveCallBack, socket);
             InitializeComponent();
-            // accNumberBlock.Text = $"{connectedUser.accNumber}";
 
+            foreach (Conversation conv in userAcc.conversations)
+            {
+                renderFriendListElem(conv.receiver);
+            }
+            // accNumberBlock.Text = $"{connectedUser.accNumber}";
         }
+
 
         private void receiveCallBack(IAsyncResult AR)
         {
@@ -73,6 +80,15 @@ namespace Client.Windows
             {
                 if (chatWindow != null)
                 {
+                    foreach (Conversation conv in userAcc.conversations)
+                    {
+                        if (conv.you == order.receiver)
+                        {
+                            conv.messages.Add(order);
+                            break;
+                        }
+                    }
+
                     TextBox txtbox = new TextBox();
                     txtbox.Text = order.message;
                     txtbox.Style = msgStyle;
@@ -90,17 +106,15 @@ namespace Client.Windows
             }
             else if (order.orderType == 2)
             {
+                userAcc.conversations.Add(new Conversation(userAcc.accNumber, order.sender));
 
-                Button cbtn = new Button();
-                cbtn.Click += openConvButton;
-                cbtn.CommandParameter = order.sender;
-                cbtn.Content = $"Chat with {order.sender}";
-                friendsStackPanel.Children.Add(cbtn);
+                renderFriendListElem(order.sender);
             }
         }
 
-        private void AccFRequest(object sender, RoutedEventArgs e)
+        public void AccFRequest(object sender, RoutedEventArgs e)
         {
+
             Button btn = (Button)sender;
             int receiver = (int)btn.CommandParameter;
             friendsStackPanel.Children.Remove(btn);
@@ -110,29 +124,47 @@ namespace Client.Windows
 
             socket.Send(sendBuff, 0, sendBuff.Length, 0);
 
-            Button cbtn = new Button();
-            cbtn.Click += openConvButton;
-            cbtn.CommandParameter = receiver;
-            cbtn.Content = $"Chat with {receiver}";
-            friendsStackPanel.Children.Add(cbtn);
+            userAcc.conversations.Add(new Conversation(userAcc.accNumber, order.receiver));
+            renderFriendListElem(order.receiver);
+            
+        }
 
+        public void renderFriendListElem(int rcv)
+        {
+            friendListElem panel = new friendListElem();
+            panel.number.Text = $"{rcv}";
+            panel.nick.Text = "nick not implemented";
+            panel.openConv.CommandParameter = rcv;
+            panel.openConv.Click += openConvButton;
+            friendsStackPanel.Children.Add(panel);
         }
 
 
-        private void openConvButton(object sender, RoutedEventArgs e)
+        public void openConvButton(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
             int receiver = (int)btn.CommandParameter;
+            Conversation openedConv;
+            foreach (Conversation conv in userAcc.conversations)
+            {
+                if (conv.receiver == receiver)
+                {
+                    openedConv = conv;
 
-            chatWindow = new ChatWindow(receiver);
-            // chatWindow.Owner = this;
-            UiControl.OpenWindow(this, chatWindow);
+                    chatWindow = new ChatWindow(openedConv);
+                    // chatWindow.Owner = this;
+                    UiControl.OpenWindow(this, chatWindow);
+                    break;
+                }
+            }
         }
+
+
 
         private void searchContactWindow(object sender, RoutedEventArgs e)
         {
             this.Hide();
-            SearchWindow searchWindow = new SearchWindow();
+            SearchWindow searchWindow = new SearchWindow(userAcc);
             searchWindow.Owner = this;
             UiControl.OpenWindow(this, searchWindow);
         }
