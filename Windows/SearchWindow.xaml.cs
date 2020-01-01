@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -45,6 +46,12 @@ namespace Client.Windows
         private void showMainWindow(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Owner.Show();
+        }
+
+        public void serverError()
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            UiControl.ChangeWindow(this, loginWindow);
         }
 
         private void searchButtonClick(object sender, RoutedEventArgs e)
@@ -103,9 +110,12 @@ namespace Client.Windows
             Order fRequest = new Order(1, MainWindow.userAcc.token, MainWindow.userAcc.accNumber, recv, DateTime.Now);
 
             Serializer serializer = new Serializer();
-            buffer = serializer.Serialize_Obj(fRequest);
-
-            MainWindow.socket.Send(buffer, 0, buffer.Length, 0);
+            byte[] sendBuff = serializer.Serialize_Obj(fRequest);
+            try
+            {
+                MainWindow.socket.Send(sendBuff, 0, sendBuff.Length, 0);
+            }
+            catch (SocketException) { serverError(); return; }
 
             // send friend request
         }

@@ -47,7 +47,15 @@ namespace Client.Windows
             {
                 renderFriendListElem(conv.receiver);
             }
-            // accNumberBlock.Text = $"{connectedUser.accNumber}";
+
+        }
+
+
+        public void serverError()
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            UiControl.ChangeWindow(this, loginWindow);
+            return;
         }
 
 
@@ -59,8 +67,8 @@ namespace Client.Windows
             {
                 received = socket.EndReceive(AR);
             }
-            catch (SocketException) { return; }
-            catch (ObjectDisposedException) { return; }
+            catch (SocketException) { Dispatcher.Invoke(new Action(() => serverError())); return; }
+            catch (ObjectDisposedException) { Dispatcher.Invoke(new Action(() => serverError())); return; }
             
 
             byte[] recBuf = new byte[received];
@@ -117,13 +125,16 @@ namespace Client.Windows
 
             Button btn = (Button)sender;
             int receiver = (int)btn.CommandParameter;
-            friendsStackPanel.Children.Remove(btn);
             Order order = new Order(2, userAcc.token, userAcc.accNumber, receiver, DateTime.Now);
 
             byte[] sendBuff = serializer.Serialize_Obj(order);
+            try
+            {
+                socket.Send(sendBuff, 0, sendBuff.Length, 0);
+            }
+            catch (SocketException) { serverError(); return; }
 
-            socket.Send(sendBuff, 0, sendBuff.Length, 0);
-
+            friendsStackPanel.Children.Remove(btn);
             userAcc.conversations.Add(new Conversation(userAcc.accNumber, order.receiver));
             renderFriendListElem(order.receiver);
             
@@ -158,7 +169,6 @@ namespace Client.Windows
                 }
             }
         }
-
 
 
         private void searchContactWindow(object sender, RoutedEventArgs e)

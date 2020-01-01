@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -37,6 +38,12 @@ namespace Client.Windows
 
         }
 
+        public void serverError()
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            UiControl.ChangeWindow(this, loginWindow);
+        }
+
         private void Send_Msg(object sender, RoutedEventArgs e)
         {
             if (MainWindow.socket != null)
@@ -50,10 +57,13 @@ namespace Client.Windows
                     conv.messages.Add(msgToSend);
 
                     Serializer serializer = new Serializer();
-                    buffer = serializer.Serialize_Obj(msgToSend);
+                    byte[] sendBuff = serializer.Serialize_Obj(msgToSend);
 
-                    MainWindow.socket.Send(buffer, 0, buffer.Length, 0);
-
+                    try
+                    {
+                        MainWindow.socket.Send(buffer, 0, buffer.Length, 0);
+                    }
+                    catch (SocketException) { serverError(); return; }
                     renderMessage(msgToSend);
                     messageInput.Text = "";
                 }

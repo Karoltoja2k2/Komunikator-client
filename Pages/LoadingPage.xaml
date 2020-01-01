@@ -9,6 +9,6 @@
       Title="LoadingPage">
 
     <Grid>
-        <MediaElement Source="C:\Users\Karol\Desktop\C#\Komunikator\Client\Resources\giphy.gif" Margin="5" HorizontalAlignment="Stretch" Height="150" Width="150"/>
+        <MediaElement Source="C:\Users\Karol\Desktop\C#\Komunikator\Client\Resources\giphy.gif" LoadedBehavior="Play" Margin="5" HorizontalAlignment="Stretch" Height="150" Width="150"/>
     </Grid>
 </Page>

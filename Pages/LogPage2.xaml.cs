@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Client.Windows;
 
 namespace Client.Pages
 {
@@ -34,6 +35,13 @@ namespace Client.Pages
             parentWin = parent;
             InitializeComponent();
             number.Text = RandomNumber();
+        }
+
+        public void serverError()
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            UiControl.ChangeWindow(parentWin, loginWindow);
+            return;
         }
 
         private void Register(object sender, RoutedEventArgs e)
@@ -92,11 +100,21 @@ namespace Client.Pages
             if (valid)
             {
                 Order order = new Order(4, nr, eMail, p1);
+
                 byte[] sendBuff = serializer.Serialize_Obj(order);
-                socket.Send(sendBuff, sendBuff.Length, 0);
+                try
+                {
+                    socket.Send(sendBuff, sendBuff.Length, 0);
+                }
+                catch (SocketException) { serverError(); }
 
                 byte[] recBuff = new byte[2048];
-                socket.Receive(recBuff, recBuff.Length, 0);
+                try
+                {
+                    socket.Receive(recBuff, recBuff.Length, 0);
+                }
+                catch (SocketException) { serverError(); }
+
                 User response = (User)serializer.Deserialize_Obj(recBuff, new User());
                 if (response.accNumber == order.sender)
                     NavigationService.GoBack();

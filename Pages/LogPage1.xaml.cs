@@ -42,6 +42,13 @@ namespace Client.Pages
             InitializeComponent();
         }
 
+        public void serverError()
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            UiControl.ChangeWindow(parentWin, loginWindow);
+            return;
+        }
+
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
@@ -72,7 +79,11 @@ namespace Client.Pages
                 alertText.Text = "Logowanie";
                 Order loginOrder = new Order(3, accNumber, password);
                 byte[] sendbuff = serializer.Serialize_Obj(loginOrder);
-                socket.Send(sendbuff, sendbuff.Length, 0);
+                try
+                {
+                    socket.Send(sendbuff, sendbuff.Length, 0);
+                }
+                catch (SocketException) { serverError(); }
                 User user = new User(accNumber, "asd", "asd", "asd");
                 MainWindow window = new MainWindow(socket, user);
                 UiControl.ChangeWindow(parentWin, window);
