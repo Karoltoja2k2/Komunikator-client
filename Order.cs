@@ -23,7 +23,7 @@ public class Order
     public string password;
     public string email;
     public bool succes;
-    public User acc;
+    public byte[] acc;
 
     public Order()
     {
@@ -89,7 +89,7 @@ public class Order
     /// <summary>
     /// ordertype == 6, after successful login send to client his profile, if not validated send succes as false
     /// </summary>
-    public Order(int orderType, int receiver, bool succes, User acc=null)
+    public Order(int orderType, int receiver, bool succes, byte[] acc = null)
     {
         this.orderType = orderType;
         this.receiver = receiver;

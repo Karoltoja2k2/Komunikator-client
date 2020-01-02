@@ -84,8 +84,16 @@ namespace Client.Pages
                     socket.Send(sendbuff, sendbuff.Length, 0);
                 }
                 catch (SocketException) { serverError(); }
-                User user = new User(accNumber, "asd", "asd", "asd");
-                MainWindow window = new MainWindow(socket, user);
+                // socket.receive(user profile serialized) and then deserialize
+                byte[] recBuff = new byte[2048]; 
+                socket.Receive(recBuff, 0, recBuff.Length, 0);
+
+                Order loginVerify = (Order)serializer.Deserialize_Obj(recBuff, new Order());
+                User profile = (User)serializer.Deserialize_Obj(loginVerify.acc, new User());
+
+                Console.WriteLine(profile);
+
+                MainWindow window = new MainWindow(socket, profile);
                 UiControl.ChangeWindow(parentWin, window);
             }
             catch (SocketException ex)

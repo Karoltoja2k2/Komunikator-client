@@ -11,8 +11,12 @@ public class User
 {
     public int accNumber;
     public string email;
-    public string password;
     public string token;
+
+    public string nickName;
+    public int phoneNum;
+    public string city;
+    public string country;
 
     public List<Conversation> conversations;
 
@@ -22,27 +26,20 @@ public class User
     }
 
 
-    public User(int accNumber, string email, string password, string token)
+    public User(int accNumber, string email, string token)
     {
         conversations = new List<Conversation>();
         this.accNumber = accNumber;
         this.email = email;
-        this.password = password;
         this.token = token;
     }
 
-
-    public byte[] ToByteArray()
+    public void updateProfile(string nick, int pNum, string City, string Country)
     {
-        string stringAccNumber = accNumber.ToString();
-
-        byte[] byteAccNumber = Encoding.ASCII.GetBytes(stringAccNumber);
-
-        List<byte> byteList = new List<byte>();
-        byteList.AddRange(byteAccNumber);
-        byteList.AddRange(Encoding.ASCII.GetBytes(";"));
-        byteList.AddRange(Encoding.ASCII.GetBytes(token));
-        return byteList.ToArray();
+        this.nickName = nick;
+        this.phoneNum = pNum;
+        this.city = City;
+        this.country = Country;
     }
 }
 
