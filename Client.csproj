@@ -157,5 +157,8 @@
   <ItemGroup>
     <Resource Include="Resources\logoSad.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Client.exe" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
