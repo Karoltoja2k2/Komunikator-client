@@ -24,6 +24,7 @@ public class Order
     public string email;
     public bool succes;
     public byte[] acc;
+    public string helpMsg;
 
     public Order()
     {
@@ -89,12 +90,13 @@ public class Order
     /// <summary>
     /// ordertype == 6, after successful login send to client his profile, if not validated send succes as false
     /// </summary>
-    public Order(int orderType, int receiver, bool succes, byte[] acc = null)
+    public Order(int orderType, int receiver, bool succes, byte[] acc = null, string msg = null)
     {
         this.orderType = orderType;
         this.receiver = receiver;
         this.succes = succes;
         this.acc = acc;
+        this.helpMsg = msg;
     }
 
 }

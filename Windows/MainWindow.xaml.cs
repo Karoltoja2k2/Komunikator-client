@@ -26,7 +26,7 @@ namespace Client.Windows
     {
         
         public static Socket socket;
-        public static User userAcc;
+        public static User profile;
         public int BUFFER_SIZE = 2048;
         public byte[] buffer = new byte[2048];
         public ChatWindow chatWindow;
@@ -36,18 +36,18 @@ namespace Client.Windows
 
         public static Style msgStyle = Application.Current.FindResource("messageBox") as Style;
 
-        public MainWindow(Socket connetion, User connectedUser)
+
+        public MainWindow(Socket connetion, User userProfile)
         {
-            userAcc = connectedUser;
+            profile = userProfile;
             socket = connetion;
             socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, receiveCallBack, socket);
             InitializeComponent();
 
-            foreach (Conversation conv in userAcc.conversations)
+            foreach (Conversation conv in profile.conversations)
             {
                 renderFriendListElem(conv.receiver);
             }
-
         }
 
 
@@ -74,36 +74,35 @@ namespace Client.Windows
             byte[] recBuf = new byte[received];
             Array.Copy(buffer, recBuf, received);
             Order order = (Order)serializer.Deserialize_Obj(recBuf, deserializeOrderType);
-
             // Calls main thread to complete order
             Dispatcher.Invoke(new Action(() => manageIncomingOrder(order)));
-           
 
             socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, receiveCallBack, socket);
         }
 
         private void manageIncomingOrder(Order order)
         {
+            // if received message
             if (order.orderType == 0)
             {
-                if (chatWindow != null)
+                // find conversation and save message
+                foreach (Conversation conv in profile.conversations)
                 {
-                    foreach (Conversation conv in userAcc.conversations)
+                    if (conv.you == order.receiver)
                     {
-                        if (conv.you == order.receiver)
-                        {
-                            conv.messages.Add(order);
-                            break;
-                        }
+                        conv.messages.Add(order);
+                        break;
                     }
-
-                    TextBox txtbox = new TextBox();
-                    txtbox.Text = order.message;
-                    txtbox.Style = msgStyle;
-                    txtbox.HorizontalAlignment = HorizontalAlignment.Left;
-                    chatWindow.msgStackPanel.Children.Add(txtbox);
                 }
+                //              RENDER NEW MESSAGE
+                // TextBox txtbox = new TextBox();
+                // txtbox.Text = order.message;
+                // txtbox.Style = msgStyle;
+                // txtbox.HorizontalAlignment = HorizontalAlignment.Left;
+                // chatWindow.msgStackPanel.Children.Add(txtbox);
             }
+
+            // render
             else if (order.orderType == 1)
             {
                 Button btn = new Button();
@@ -114,7 +113,7 @@ namespace Client.Windows
             }
             else if (order.orderType == 2)
             {
-                userAcc.conversations.Add(new Conversation(userAcc.accNumber, order.sender));
+                profile.conversations.Add(new Conversation(profile.accNumber, order.sender));
 
                 renderFriendListElem(order.sender);
             }
@@ -125,7 +124,7 @@ namespace Client.Windows
 
             Button btn = (Button)sender;
             int receiver = (int)btn.CommandParameter;
-            Order order = new Order(2, userAcc.token, userAcc.accNumber, receiver, DateTime.Now);
+            Order order = new Order(2, profile.token, profile.accNumber, receiver, DateTime.Now);
 
             byte[] sendBuff = serializer.Serialize_Obj(order);
             try
@@ -135,7 +134,7 @@ namespace Client.Windows
             catch (SocketException) { serverError(); return; }
 
             friendsStackPanel.Children.Remove(btn);
-            userAcc.conversations.Add(new Conversation(userAcc.accNumber, order.receiver));
+            profile.conversations.Add(new Conversation(profile.accNumber, order.receiver));
             renderFriendListElem(order.receiver);
             
         }
@@ -156,7 +155,7 @@ namespace Client.Windows
             Button btn = (Button)sender;
             int receiver = (int)btn.CommandParameter;
             Conversation openedConv;
-            foreach (Conversation conv in userAcc.conversations)
+            foreach (Conversation conv in profile.conversations)
             {
                 if (conv.receiver == receiver)
                 {
@@ -174,7 +173,7 @@ namespace Client.Windows
         private void searchContactWindow(object sender, RoutedEventArgs e)
         {
             this.Hide();
-            SearchWindow searchWindow = new SearchWindow(userAcc);
+            SearchWindow searchWindow = new SearchWindow(profile);
             searchWindow.Owner = this;
             UiControl.OpenWindow(this, searchWindow);
         }

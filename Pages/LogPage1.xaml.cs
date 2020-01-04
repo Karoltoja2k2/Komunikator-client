@@ -33,7 +33,6 @@ namespace Client.Pages
         private static readonly byte[] buffer = new byte[BUFFER_SIZE];
 
 
-
         public LogPage1(Window parent, Socket socketParam)
         {
             this.socket = socketParam;
@@ -42,6 +41,14 @@ namespace Client.Pages
             InitializeComponent();
         }
 
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+
         public void serverError()
         {
             LoginWindow loginWindow = new LoginWindow();
@@ -49,11 +56,6 @@ namespace Client.Pages
             return;
         }
 
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            Regex regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
-        }
 
         private void Login(object sender, RoutedEventArgs e)
         {
@@ -66,42 +68,47 @@ namespace Client.Pages
             string password = passwordInput.Password;
             if (String.IsNullOrEmpty(stringAccNumber))
             {
-                accNumber = 21372137;
+                accNumber = 23881090;
+                password = "lolek123123";
             }
             else
             {
                 accNumber = Int32.Parse(stringAccNumber);
             }
 
-
+            alertText.Text = "Logowanie";
+            Order loginOrder = new Order(3, accNumber, password);
+            byte[] sendbuff = serializer.Serialize_Obj(loginOrder);
             try
             {
-                alertText.Text = "Logowanie";
-                Order loginOrder = new Order(3, accNumber, password);
-                byte[] sendbuff = serializer.Serialize_Obj(loginOrder);
-                try
-                {
-                    socket.Send(sendbuff, sendbuff.Length, 0);
-                }
-                catch (SocketException) { serverError(); }
-                // socket.receive(user profile serialized) and then deserialize
-                byte[] recBuff = new byte[2048]; 
-                socket.Receive(recBuff, 0, recBuff.Length, 0);
-
-                Order loginVerify = (Order)serializer.Deserialize_Obj(recBuff, new Order());
-                User profile = (User)serializer.Deserialize_Obj(loginVerify.acc, new User());
-
-                Console.WriteLine(profile);
-
-                MainWindow window = new MainWindow(socket, profile);
-                UiControl.ChangeWindow(parentWin, window);
+                socket.Send(sendbuff, sendbuff.Length, 0);
             }
-            catch (SocketException ex)
+            catch (SocketException) { serverError(); }
+
+            byte[] recBuff = new byte[2048]; 
+            socket.Receive(recBuff, 0, recBuff.Length, 0);
+            Order loginVerify = (Order)serializer.Deserialize_Obj(recBuff, new Order());
+
+            User profile;
+            if (loginVerify.succes == true)
             {
-                alertText.Text = ex.Message;
-                loginButton.IsEnabled = true;
+                numberInput.BorderBrush = Brushes.Green;
+                passwordInput.BorderBrush =  Brushes.Green;
+                profile = (User)serializer.Deserialize_Obj(loginVerify.acc, new User());
             }
+            else
+            {
+                loginButton.IsEnabled = true;
+                numberInput.BorderBrush = Brushes.Red;
+                passwordInput.BorderBrush = Brushes.Red;
+                alertText.Text = loginVerify.helpMsg;
+                return;
+            }
+
+            MainWindow window = new MainWindow(socket, profile);
+            UiControl.ChangeWindow(parentWin, window);
         }
+
 
         private void RegistrationPage(object sender, RoutedEventArgs e)
         {

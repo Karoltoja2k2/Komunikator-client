@@ -53,7 +53,7 @@ namespace Client.Windows
 
                 if (!String.IsNullOrEmpty(msg))
                 {
-                    Order msgToSend = new Order(0, MainWindow.userAcc.token, conv.you, conv.receiver, msg, DateTime.Now);
+                    Order msgToSend = new Order(0, MainWindow.profile.token, conv.you, conv.receiver, msg, DateTime.Now);
                     conv.messages.Add(msgToSend);
 
                     Serializer serializer = new Serializer();

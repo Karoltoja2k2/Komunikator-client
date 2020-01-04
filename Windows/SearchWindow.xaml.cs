@@ -107,7 +107,7 @@ namespace Client.Windows
             Button btn = (Button)sender;
             string receiver = (string)btn.CommandParameter;
             int recv = Int32.Parse(receiver);
-            Order fRequest = new Order(1, MainWindow.userAcc.token, MainWindow.userAcc.accNumber, recv, DateTime.Now);
+            Order fRequest = new Order(1, MainWindow.profile.token, MainWindow.profile.accNumber, recv, DateTime.Now);
 
             Serializer serializer = new Serializer();
             byte[] sendBuff = serializer.Serialize_Obj(fRequest);
