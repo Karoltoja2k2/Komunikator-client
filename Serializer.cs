@@ -10,17 +10,10 @@ using System;
 public class Serializer
 {
     public Order orderType;
-    public Type[] extraTypes;
 
     public Serializer()
     {
-        extraTypes = new Type[3];
         this.orderType = new Order();
-        extraTypes[0] = new Conversation().GetType();
-        extraTypes[1] = new User().GetType();
-        extraTypes[2] = new Order().GetType();
-
-
     }
 
     public byte[] Serialize_Obj(object toSerialize)
@@ -41,7 +34,7 @@ public class Serializer
     public object Deserialize_Obj(byte[] toDeserialize, object type)
     {
         MemoryStream ms = new MemoryStream(toDeserialize);
-        XmlSerializer xmlSerializer = new XmlSerializer(type.GetType(), extraTypes);
+        XmlSerializer xmlSerializer = new XmlSerializer(type.GetType(), "");
         object testObj = xmlSerializer.Deserialize(ms);
 
         return testObj;

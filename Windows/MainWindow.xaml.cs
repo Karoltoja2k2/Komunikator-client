@@ -30,6 +30,7 @@ namespace Client.Windows
         public int BUFFER_SIZE = 2048;
         public byte[] buffer = new byte[2048];
         public ChatWindow chatWindow;
+        public SearchWindow searchWindow;
 
         public static Serializer serializer = new Serializer();
         public static Order deserializeOrderType = new Order();
@@ -47,6 +48,12 @@ namespace Client.Windows
             foreach (Conversation conv in profile.conversations)
             {
                 renderFriendListElem(conv.receiver);
+            }
+
+            foreach(Order ord in profile.pendingOrders)
+            {
+                renderFriendListElem(ord.sender);
+
             }
         }
 
@@ -117,6 +124,10 @@ namespace Client.Windows
 
                 renderFriendListElem(order.sender);
             }
+            else if (order.orderType == 8 && searchWindow != null)
+            {
+                searchWindow.searchResultsRender(order);
+            }
         }
 
         public void AccFRequest(object sender, RoutedEventArgs e)
@@ -173,7 +184,7 @@ namespace Client.Windows
         private void searchContactWindow(object sender, RoutedEventArgs e)
         {
             this.Hide();
-            SearchWindow searchWindow = new SearchWindow(profile);
+            searchWindow = new SearchWindow(profile, socket);
             searchWindow.Owner = this;
             UiControl.OpenWindow(this, searchWindow);
         }

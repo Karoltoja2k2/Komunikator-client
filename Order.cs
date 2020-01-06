@@ -25,6 +25,11 @@ public class Order
     public bool succes;
     public byte[] acc;
     public string helpMsg;
+    public int accNum;
+    public int phoneNum;
+    public string nickName;
+    public List<User> foundProfiles;
+
 
     public Order()
     {
@@ -90,13 +95,36 @@ public class Order
     /// <summary>
     /// ordertype == 6, after successful login send to client his profile, if not validated send succes as false
     /// </summary>
-    public Order(int orderType, int receiver, bool succes, byte[] acc = null, string msg = null)
+    public Order(int orderType, int receiver, bool succes, byte[] acc=null, string msg=null)
     {
         this.orderType = orderType;
         this.receiver = receiver;
         this.succes = succes;
         this.acc = acc;
         this.helpMsg = msg;
+    }
+
+    /// <summary>
+    /// ordertype == 7, search user
+    /// </summary>
+    public Order(int orderType, int sender, int accNum = 0, int phoneNum = 0, string nickName = null, string email = null)
+    {
+        this.orderType = orderType;
+        this.sender = sender;
+        this.accNum = accNum;
+        this.phoneNum = phoneNum;
+        this.nickName = nickName;
+        this.email = email;
+    }
+
+    /// <summary>
+    /// ordertype == 8, send back search matched accounts
+    /// </summary>
+    public Order(int orderType, int receiver, List<User> foundProfiles)
+    {
+        this.orderType = orderType;
+        this.receiver = receiver;
+        this.foundProfiles = foundProfiles;
     }
 
 }

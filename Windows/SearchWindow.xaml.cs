@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,22 +22,19 @@ namespace Client.Windows
     /// </summary>
     public partial class SearchWindow : Window
     {
-        byte[] buffer;
+        private static readonly byte[] buffer = new byte[2048];
         User userAcc;
+        Socket connection;
+        Serializer serializer;
 
-        public SearchWindow(User user)
+        public SearchWindow(User user, Socket connection)
         {
             userAcc = user;
+            this.connection = connection;
+            serializer = new Serializer();
             InitializeComponent();
             
         }
-
-        // private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        // {
-        //     Regex regex = new Regex("[^0-9]+");
-        //     e.Handled = regex.IsMatch(e.Text);
-        // }
-        // 
 
         private void declineButton(object sender, RoutedEventArgs e)
         {
@@ -54,62 +52,78 @@ namespace Client.Windows
             UiControl.ChangeWindow(this, loginWindow);
         }
 
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
         private void searchButtonClick(object sender, RoutedEventArgs e)
         {
             // database interaction logic to find user matching with given number
 
             resultStackPanel.Children.Clear();
-            string[] accounts = File.ReadAllLines(@"C:\Users\Karol\Desktop\C#\Komunikator\Client\accounts.txt");
-            List<string> foundAccounts = new List<string>();
-            string searching1 = search1.Text;
-            string searching2 = search2.Text;
+            int accNum;
+            int phoneNum;
+            if (!String.IsNullOrEmpty(search1.Text))
+                accNum = Int32.Parse(search1.Text);
+            else
+                accNum = 0;
 
-            foreach (string account in accounts)
+            if (!String.IsNullOrEmpty(search2.Text))
+                phoneNum = Int32.Parse(search2.Text);
+            else
+                phoneNum = 0;
+
+            string nickName = search3.Text;
+            string email = search4.Text;
+
+            Order searchRequest = new Order(7, userAcc.accNumber, accNum, phoneNum, nickName, email);
+            byte[] sendBuff = serializer.Serialize_Obj(searchRequest);
+            MainWindow.socket.Send(sendBuff, 0, sendBuff.Length, 0);
+        }
+
+        public void searchResultsRender(Order receivedOrder)
+        {
+            List<User> foundAccounts = new List<User>();
+
+            foreach (User profile in receivedOrder.foundProfiles)
             {
-                string[] acc = account.Split(';');
-                string search = acc[0];
-                if (acc[0] != $"{userAcc.accNumber}")
+                if (profile.accNumber != userAcc.accNumber)
+                {
+                    if (!userAcc.friendList.Contains(profile.accNumber))
                     {
-                    if (search == searching1 | search == searching2)
-                    {
-                        foreach (Conversation conv in userAcc.conversations)
-                        {
-                             if ($"{conv.receiver}" != acc[0])
-                            {
-                                foundAccounts.Add(acc[0]);
-                            }
-                        }
+                        foundAccounts.Add(profile);
                     }
                 }
             }
 
             if (foundAccounts.Count == 0)
             {
-                resultCounter.Text = "Brak wyników";
+                Dispatcher.Invoke(new Action(() => resultCounter.Text = "Brak wyników"));
+                
             }
             else
             {
                 resultCounter.Text = $"{foundAccounts.Count} wyników";
-                foreach (string acc in foundAccounts)
+                foreach (User acc in foundAccounts)
                 {
                     Button btn = new Button();
-                    btn.Content = acc;
-                    btn.CommandParameter = acc;
+                    btn.Content = acc.accNumber;
+                    btn.CommandParameter = acc.accNumber;
                     resultStackPanel.Children.Add(btn);
                     btn.Click += sendFriendRequest;
                 }
             }
-            
+
         }
 
         private void sendFriendRequest(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
-            string receiver = (string)btn.CommandParameter;
-            int recv = Int32.Parse(receiver);
-            Order fRequest = new Order(1, MainWindow.profile.token, MainWindow.profile.accNumber, recv, DateTime.Now);
+            int receiver = (int)btn.CommandParameter;
+            Order fRequest = new Order(1, MainWindow.profile.token, MainWindow.profile.accNumber, receiver, DateTime.Now);
 
-            Serializer serializer = new Serializer();
             byte[] sendBuff = serializer.Serialize_Obj(fRequest);
             try
             {
@@ -119,5 +133,6 @@ namespace Client.Windows
 
             // send friend request
         }
+
     }
 }

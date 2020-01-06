@@ -19,6 +19,8 @@ public class User
     public string country;
 
     public List<Conversation> conversations;
+    public List<int> friendList;
+    public List<Order> pendingOrders;
 
 
     public User()

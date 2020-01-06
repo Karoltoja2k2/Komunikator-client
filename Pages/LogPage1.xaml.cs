@@ -68,7 +68,7 @@ namespace Client.Pages
             string password = passwordInput.Password;
             if (String.IsNullOrEmpty(stringAccNumber))
             {
-                accNumber = 23881090;
+                accNumber = 74451050;
                 password = "lolek123123";
             }
             else
@@ -88,7 +88,7 @@ namespace Client.Pages
             byte[] recBuff = new byte[2048]; 
             socket.Receive(recBuff, 0, recBuff.Length, 0);
             Order loginVerify = (Order)serializer.Deserialize_Obj(recBuff, new Order());
-
+             
             User profile;
             if (loginVerify.succes == true)
             {
