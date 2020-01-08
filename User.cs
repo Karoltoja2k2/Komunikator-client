@@ -28,20 +28,19 @@ public class User
     }
 
 
-    public User(int accNumber, string email, string token)
+    public User(int accNumber, string email, string nick, int pNum, string City, string Country)
     {
-        conversations = new List<Conversation>();
         this.accNumber = accNumber;
         this.email = email;
-        this.token = token;
-    }
-
-    public void updateProfile(string nick, int pNum, string City, string Country)
-    {
         this.nickName = nick;
         this.phoneNum = pNum;
         this.city = City;
         this.country = Country;
+    }
+
+    public void updateProfile(string nick, int pNum, string City, string Country)
+    {
+
     }
 }
 

@@ -24,5 +24,6 @@ namespace Client.Resources
         {
             InitializeComponent();
         }
+
     }
 }

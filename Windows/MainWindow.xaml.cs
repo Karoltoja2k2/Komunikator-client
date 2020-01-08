@@ -45,16 +45,16 @@ namespace Client.Windows
             socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, receiveCallBack, socket);
             InitializeComponent();
 
-            foreach (Conversation conv in profile.conversations)
-            {
-                renderFriendListElem(conv.receiver);
-            }
-
-            foreach(Order ord in profile.pendingOrders)
-            {
-                renderFriendListElem(ord.sender);
-
-            }
+            // foreach (Conversation conv in profile.conversations)
+            // {
+            //     renderFriendListElem(conv.receiver);
+            // }
+            // 
+            // foreach(Order ord in profile.pendingOrders)
+            // {
+            //     renderFriendListElem(ord.sender);
+            // 
+            // }
         }
 
 
@@ -180,8 +180,38 @@ namespace Client.Windows
             }
         }
 
+        private void showFRequests(object sender, RoutedEventArgs e)
+        {
+            if (profile.pendingOrders.Count != 0)
+            {
+                if (friendRequestPanel.Height == 0)
+                    friendRequestPanel.Height = Double.NaN;
+                else
+                    friendRequestPanel.Height = 0;
+            }
+            else
+            {
+                showRequests.Foreground = new SolidColorBrush(Colors.Red);
+            }
+        }
 
-        private void searchContactWindow(object sender, RoutedEventArgs e)
+        private void showFriendList(object sender, MouseButtonEventArgs e)
+        {
+            if (profile.conversations.Count != 0)
+            {
+                if (friendsStackPanel.Height == 0)
+                    friendsStackPanel.Height = Double.NaN;
+                else
+                    friendsStackPanel.Height = 0;
+            }
+            else
+            {
+                showFrequests.Foreground = new SolidColorBrush(Colors.Red);
+            }
+        }
+
+
+    private void searchContactWindow(object sender, RoutedEventArgs e)
         {
             this.Hide();
             searchWindow = new SearchWindow(profile, socket);
@@ -213,19 +243,17 @@ namespace Client.Windows
 
         private void searchButtonStyleFocus(object sender, MouseEventArgs e)
         {
-            searchButton.Foreground = new SolidColorBrush(Colors.ForestGreen);
-            searchButton.FontSize += 3;
+            TextBlock elem = e.Source as TextBlock;
+            elem.Foreground = new SolidColorBrush(Colors.ForestGreen);
+            elem.FontSize += 3;
         }
 
         private void searchButtonStyleFocusOut(object sender, MouseEventArgs e)
         {
-            searchButton.Foreground = new SolidColorBrush(Colors.Black);
-            searchButton.FontSize -= 3;
+            TextBlock elem = e.Source as TextBlock;
+            elem.Foreground = new SolidColorBrush(Colors.Black);
+            elem.FontSize -= 3;
         }
-
-
-
-
 
 
     }

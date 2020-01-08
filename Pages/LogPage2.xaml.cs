@@ -115,8 +115,8 @@ namespace Client.Pages
                 }
                 catch (SocketException) { serverError(); }
 
-                User response = (User)serializer.Deserialize_Obj(recBuff, new User());
-                if (response.accNumber == order.sender)
+                Order response = (Order)serializer.Deserialize_Obj(recBuff, new Order());
+                if (response.succes == true && response.orderType == 5)
                     NavigationService.GoBack();
                 else
                     alertText.Text = "Rejestracja się nie udała i w sumie nie wiem czemu xD";

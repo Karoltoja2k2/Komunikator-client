@@ -28,8 +28,9 @@ namespace Client.Pages
         public LogPage2 page2;
         private Socket socket;
 
+        private User profile;
         private Serializer serializer = new Serializer();
-        private const int BUFFER_SIZE = 2048;
+        private const int BUFFER_SIZE = 1048576;
         private static readonly byte[] buffer = new byte[BUFFER_SIZE];
 
 
@@ -85,30 +86,63 @@ namespace Client.Pages
             }
             catch (SocketException) { serverError(); }
 
-            byte[] recBuff = new byte[2048]; 
-            socket.Receive(recBuff, 0, recBuff.Length, 0);
-            Order loginVerify = (Order)serializer.Deserialize_Obj(recBuff, new Order());
+            socket.BeginReceive(buffer, 0, buffer.Length, 0, receiveCallBack, socket);
+
              
-            User profile;
+           
+        }
+
+        private void receiveCallBack(IAsyncResult ar)
+        {
+            Socket socket = (Socket)ar.AsyncState;
+            int received;
+            try
+            {
+                received = socket.EndReceive(ar);
+            }
+            catch (SocketException) { Dispatcher.Invoke(new Action(() => serverError())); return; }
+            catch (ObjectDisposedException) { Dispatcher.Invoke(new Action(() => serverError())); return; }
+
+
+            byte[] recBuf = new byte[received];
+            Array.Copy(buffer, recBuf, received);
+            Order loginVerify = (Order)serializer.Deserialize_Obj(recBuf, new Order());
+
             if (loginVerify.succes == true)
             {
+                profile = loginVerify.acc;
+                Dispatcher.Invoke(new Action(() => manageResponse(true)));
+            }
+            else
+            {
+                Dispatcher.Invoke(new Action(() => manageResponse(false, loginVerify.helpMsg)));
+                return;
+            }
+
+            
+        }
+
+        private void manageResponse(bool success, string msg=null)
+        {
+            if (success)
+            {
+
+
+
                 numberInput.BorderBrush = Brushes.Green;
-                passwordInput.BorderBrush =  Brushes.Green;
-                profile = (User)serializer.Deserialize_Obj(loginVerify.acc, new User());
+                passwordInput.BorderBrush = Brushes.Green;
+
+                MainWindow window = new MainWindow(socket, profile);
+                UiControl.ChangeWindow(parentWin, window);
             }
             else
             {
                 loginButton.IsEnabled = true;
                 numberInput.BorderBrush = Brushes.Red;
                 passwordInput.BorderBrush = Brushes.Red;
-                alertText.Text = loginVerify.helpMsg;
-                return;
+                alertText.Text = msg;
             }
-
-            MainWindow window = new MainWindow(socket, profile);
-            UiControl.ChangeWindow(parentWin, window);
         }
-
 
         private void RegistrationPage(object sender, RoutedEventArgs e)
         {

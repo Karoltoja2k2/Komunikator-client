@@ -23,7 +23,10 @@ public class Order
     public string password;
     public string email;
     public bool succes;
-    public byte[] acc;
+    public User acc;
+    public List<Order> messages;
+    public List<Order> pendingOrders;
+    public List<int> friendList;
     public string helpMsg;
     public int accNum;
     public int phoneNum;
@@ -95,12 +98,14 @@ public class Order
     /// <summary>
     /// ordertype == 6, after successful login send to client his profile, if not validated send succes as false
     /// </summary>
-    public Order(int orderType, int receiver, bool succes, byte[] acc=null, string msg=null)
+    public Order(int orderType, int receiver, bool succes, List<Order> messages = null, User acc = null, List<Order> pOrders = null, List<int> fList = null, string msg = null)
     {
         this.orderType = orderType;
         this.receiver = receiver;
         this.succes = succes;
+        this.messages = messages;
         this.acc = acc;
+        this.friendList = fList;
         this.helpMsg = msg;
     }
 
