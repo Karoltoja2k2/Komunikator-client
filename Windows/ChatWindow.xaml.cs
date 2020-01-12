@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Client.Resources;
 
 namespace Client.Windows
 {
@@ -22,6 +23,7 @@ namespace Client.Windows
     {
         private byte[] buffer;
         public Conversation conv;
+        public int prevMsgSnd;
 
         public ChatWindow(Conversation conv)
         {
@@ -34,14 +36,17 @@ namespace Client.Windows
             }
 
             recvNumber.Text = $"{conv.receiver}";
-
-
         }
 
         public void serverError()
         {
             LoginWindow loginWindow = new LoginWindow();
             UiControl.ChangeWindow(this, loginWindow);
+        }
+
+        public void chatWinOnExit(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MainWindow.chatWindows.Remove(this);
         }
 
         private void Send_Msg(object sender, RoutedEventArgs e)
@@ -61,26 +66,81 @@ namespace Client.Windows
 
                     try
                     {
-                        MainWindow.socket.Send(buffer, 0, buffer.Length, 0);
+                        MainWindow.socket.Send(sendBuff, 0, sendBuff.Length, 0);
                     }
                     catch (SocketException) { serverError(); return; }
                     renderMessage(msgToSend);
+                    msgPanelScroll.ScrollToEnd();
                     messageInput.Text = "";
                 }
             }
         }
 
-        private void renderMessage(Order msg)
+        public void renderMessage(Order msg)
         {
-            TextBox txtbox = new TextBox();
-            txtbox.Text = msg.message;
-            txtbox.Style = MainWindow.msgStyle;
-            if (msg.sender == conv.you)
-                txtbox.HorizontalAlignment = HorizontalAlignment.Right;
-            else
-                txtbox.HorizontalAlignment = HorizontalAlignment.Left;
 
-            msgStackPanel.Children.Add(txtbox);
+            msgBoxRight msgBoxR;
+            msgBoxLeft msgBoxL;
+            Thickness margin;
+
+            int imageHeight = 30;
+
+            if (prevMsgSnd != 0 && msg.sender == prevMsgSnd)
+            {
+                margin = new Thickness(5, 0, 5, 2);
+                imageHeight = 0;
+            }
+            else
+            {
+                margin = new Thickness(5, 8, 5, 2);
+            }
+
+            if (msg.sender == conv.receiver)
+            {
+                msgBoxL = new msgBoxLeft();
+                msgBoxL.messageText.Text = msg.message;
+                msgBoxL.Margin = margin;
+                msgBoxL.profileImage.Height = imageHeight;
+                msgStackPanel.Children.Add(msgBoxL);
+            }
+            else
+            {
+                msgBoxR = new msgBoxRight();
+                msgBoxR.messageText.Text = msg.message;
+                msgBoxR.Margin = margin;
+                msgBoxR.profileImage.Height = imageHeight;
+                msgStackPanel.Children.Add(msgBoxR);
+            }
+            prevMsgSnd = msg.sender;
         }
+
+        // STYLES
+
+        private void ScrollViewer_ScrollChanged(Object sender, ScrollChangedEventArgs e)
+        {
+            bool AutoScroll = true; ;
+            // User scroll event : set or unset auto-scroll mode
+            if (e.ExtentHeightChange == 0)
+            {   // Content unchanged : user scroll event
+                if (msgPanelScroll.VerticalOffset == msgPanelScroll.ScrollableHeight)
+                {   // Scroll bar is in bottom
+                    // Set auto-scroll mode
+                    AutoScroll = true;
+                }
+                else
+                {   // Scroll bar isn't in bottom
+                    // Unset auto-scroll mode
+                    AutoScroll = false;
+                }
+            }
+
+            // Content scroll event : auto-scroll eventually
+            if (AutoScroll && e.ExtentHeightChange != 0)
+            {   // Content changed and auto-scroll mode set
+                // Autoscroll
+                msgPanelScroll.ScrollToVerticalOffset(msgPanelScroll.ExtentHeight);
+            }
+        }
+
     }
 }

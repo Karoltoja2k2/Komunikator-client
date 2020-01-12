@@ -70,8 +70,17 @@
     <Compile Include="Pages\LogPage2.xaml.cs">
       <DependentUpon>LogPage2.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Resources\friendRequestElem.xaml.cs">
+      <DependentUpon>friendRequestElem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Resources\friendListElem.xaml.cs">
       <DependentUpon>friendListElem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\msgBoxLeft.xaml.cs">
+      <DependentUpon>msgBoxLeft.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\msgBoxRight.xaml.cs">
+      <DependentUpon>msgBoxRight.xaml</DependentUpon>
     </Compile>
     <Compile Include="Serializer.cs" />
     <Compile Include="User.cs" />
@@ -104,7 +113,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\friendRequestElem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources\friendListElem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\msgBoxLeft.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\msgBoxRight.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

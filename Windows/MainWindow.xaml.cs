@@ -29,12 +29,13 @@ namespace Client.Windows
         public static User profile;
         public int BUFFER_SIZE = 2048;
         public byte[] buffer = new byte[2048];
-        public ChatWindow chatWindow;
+        public static List<ChatWindow> chatWindows = new List<ChatWindow>();
         public SearchWindow searchWindow;
 
         public static Serializer serializer = new Serializer();
         public static Order deserializeOrderType = new Order();
 
+        public static List<friendRequestElem> reqPanelElements = new List<friendRequestElem>();
         public static Style msgStyle = Application.Current.FindResource("messageBox") as Style;
 
 
@@ -45,16 +46,22 @@ namespace Client.Windows
             socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, receiveCallBack, socket);
             InitializeComponent();
 
-            // foreach (Conversation conv in profile.conversations)
-            // {
-            //     renderFriendListElem(conv.receiver);
-            // }
-            // 
-            // foreach(Order ord in profile.pendingOrders)
-            // {
-            //     renderFriendListElem(ord.sender);
-            // 
-            // }
+            renderData();
+        }
+
+        public void renderData()
+        {
+            friendsStackPanel.Children.Clear();
+            foreach (Conversation conv in profile.conversations)
+            {
+                renderFriendListElem(conv.receiver);
+            }
+
+            friendRequestPanel.Children.Clear();
+            foreach (Order ord in profile.pendingOrders)
+            {
+                renderFriendRequestElem(ord.sender);
+            }
         }
 
 
@@ -101,22 +108,19 @@ namespace Client.Windows
                         break;
                     }
                 }
-                //              RENDER NEW MESSAGE
-                // TextBox txtbox = new TextBox();
-                // txtbox.Text = order.message;
-                // txtbox.Style = msgStyle;
-                // txtbox.HorizontalAlignment = HorizontalAlignment.Left;
-                // chatWindow.msgStackPanel.Children.Add(txtbox);
+
+                foreach (ChatWindow chatWin in chatWindows)
+                {
+                    if (chatWin.conv.receiver == order.sender)
+                        chatWin.renderMessage(order);
+                }
             }
 
             // render
             else if (order.orderType == 1)
             {
-                Button btn = new Button();
-                btn.Content = $"{order.sender} sends friend request, click to acc";
-                btn.CommandParameter = order.sender;
-                btn.Click += AccFRequest;
-                friendsStackPanel.Children.Add(btn);
+                profile.pendingOrders.Add(order);
+                renderFriendRequestElem(order.sender);
             }
             else if (order.orderType == 2)
             {
@@ -144,9 +148,12 @@ namespace Client.Windows
             }
             catch (SocketException) { serverError(); return; }
 
-            friendsStackPanel.Children.Remove(btn);
             profile.conversations.Add(new Conversation(profile.accNumber, order.receiver));
-            renderFriendListElem(order.receiver);
+
+            var acceptedFReq = profile.pendingOrders.Find(req => req.sender == receiver);
+            profile.pendingOrders.Remove(acceptedFReq);
+
+            renderData();
             
         }
 
@@ -154,11 +161,22 @@ namespace Client.Windows
         {
             friendListElem panel = new friendListElem();
             panel.number.Text = $"{rcv}";
-            panel.nick.Text = "nick not implemented";
+            panel.nick.Text = "nick";
             panel.openConv.CommandParameter = rcv;
             panel.openConv.Click += openConvButton;
             friendsStackPanel.Children.Add(panel);
         }
+
+        public void renderFriendRequestElem(int rcv)
+        {
+            friendRequestElem panel = new friendRequestElem();
+            panel.number.Text = $"{rcv}";
+            panel.nick.Text = $"nick";
+            panel.acceptReq.CommandParameter = rcv;
+            panel.acceptReq.Click += AccFRequest;
+            friendRequestPanel.Children.Add(panel);
+        }
+
 
 
         public void openConvButton(object sender, RoutedEventArgs e)
@@ -170,45 +188,22 @@ namespace Client.Windows
             {
                 if (conv.receiver == receiver)
                 {
+                    foreach (ChatWindow chatWin in chatWindows)
+                    {
+                        if (chatWin.conv.receiver == receiver)
+                            return;
+                    }
                     openedConv = conv;
 
-                    chatWindow = new ChatWindow(openedConv);
-                    // chatWindow.Owner = this;
+                    ChatWindow chatWindow = new ChatWindow(openedConv);
+                    chatWindows.Add(chatWindow);
                     UiControl.OpenWindow(this, chatWindow);
                     break;
                 }
             }
         }
 
-        private void showFRequests(object sender, RoutedEventArgs e)
-        {
-            if (profile.pendingOrders.Count != 0)
-            {
-                if (friendRequestPanel.Height == 0)
-                    friendRequestPanel.Height = Double.NaN;
-                else
-                    friendRequestPanel.Height = 0;
-            }
-            else
-            {
-                showRequests.Foreground = new SolidColorBrush(Colors.Red);
-            }
-        }
 
-        private void showFriendList(object sender, MouseButtonEventArgs e)
-        {
-            if (profile.conversations.Count != 0)
-            {
-                if (friendsStackPanel.Height == 0)
-                    friendsStackPanel.Height = Double.NaN;
-                else
-                    friendsStackPanel.Height = 0;
-            }
-            else
-            {
-                showFrequests.Foreground = new SolidColorBrush(Colors.Red);
-            }
-        }
 
 
     private void searchContactWindow(object sender, RoutedEventArgs e)
@@ -222,39 +217,54 @@ namespace Client.Windows
         private void logoutButton(object sender, RoutedEventArgs e)
         {
             socket.Close();
-            LoginWindow window = new LoginWindow();
-            UiControl.ChangeWindow(this, window);
         }
 
         private void mainOnExit(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // this will close all chat windows in future, but now there is only one chat window open at time
-            if (chatWindow != null)
+            int openedWindows = chatWindows.Count;
+            for (int i = 0; i < openedWindows; i++)
             {
-                chatWindow.Close();
+                MainWindow.chatWindows.ElementAt<ChatWindow>(0).Close();
             }
         }
 
+        // STYLES
 
-
-
-
-        // STYLES FUNCTIONS
-
-        private void searchButtonStyleFocus(object sender, MouseEventArgs e)
+        private void showFRequests(object sender, RoutedEventArgs e)
         {
-            TextBlock elem = e.Source as TextBlock;
-            elem.Foreground = new SolidColorBrush(Colors.ForestGreen);
-            elem.FontSize += 3;
+            if (profile.pendingOrders.Count != 0)
+            {
+                if (friendRequestPanel.Height == 0)
+                {
+                    friendRequestPanel.Height = Double.NaN;
+                    friendsStackPanel.Height = 0;
+                }
+                else
+                    friendRequestPanel.Height = 0;
+            }
+            else
+            {
+                reqListBtn.Background = new SolidColorBrush(Colors.Red);
+            }
         }
 
-        private void searchButtonStyleFocusOut(object sender, MouseEventArgs e)
+        private void showFriendList(object sender, RoutedEventArgs e)
         {
-            TextBlock elem = e.Source as TextBlock;
-            elem.Foreground = new SolidColorBrush(Colors.Black);
-            elem.FontSize -= 3;
+            if (profile.conversations.Count != 0)
+            {
+                if (friendsStackPanel.Height == 0)
+                {
+                    friendsStackPanel.Height = Double.NaN;
+                    friendRequestPanel.Height = 0;
+                }
+                else
+                    friendsStackPanel.Height = 0;
+            }
+            else
+            {
+                friendListBtn.Foreground = new SolidColorBrush(Colors.Red);
+            }
         }
-
 
     }
 }

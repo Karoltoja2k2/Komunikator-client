@@ -33,6 +33,7 @@ namespace Client.Windows
         public LoginWindow()
         {
             InitializeComponent();
+            Style = (Style)FindResource(typeof(Window));
 
             loadingPage = new LoadingPage();
             Loaded += loadLoadingPage;

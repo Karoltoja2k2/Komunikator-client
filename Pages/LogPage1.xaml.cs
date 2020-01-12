@@ -69,7 +69,7 @@ namespace Client.Pages
             string password = passwordInput.Password;
             if (String.IsNullOrEmpty(stringAccNumber))
             {
-                accNumber = 74451050;
+                accNumber = 12364404;
                 password = "lolek123123";
             }
             else
@@ -111,6 +111,26 @@ namespace Client.Pages
             if (loginVerify.succes == true)
             {
                 profile = loginVerify.acc;
+                profile.friendList = loginVerify.friendList;
+                profile.pendingOrders = loginVerify.pendingOrders;
+                
+                foreach(int friend in profile.friendList)
+                {
+                    profile.conversations.Add(new Conversation(profile.accNumber, friend));
+                }
+
+                int convToFind;
+                Conversation foundConv;
+                foreach (Order msg in loginVerify.messages)
+                {
+                    convToFind = msg.sender != profile.accNumber ? msg.sender : msg.receiver;
+                    foundConv = profile.conversations.Find(conv => conv.receiver == convToFind);
+                    if (foundConv != null)
+                        foundConv.messages.Add(msg);
+                }
+
+
+
                 Dispatcher.Invoke(new Action(() => manageResponse(true)));
             }
             else
@@ -126,9 +146,6 @@ namespace Client.Pages
         {
             if (success)
             {
-
-
-
                 numberInput.BorderBrush = Brushes.Green;
                 passwordInput.BorderBrush = Brushes.Green;
 

@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client.Windows"
         mc:Ignorable="d"
-        Title="ChatWindow" Height="450" Width="800">
+        Title="ChatWindow" Height="450" Width="800"
+        Closing="chatWinOnExit">
+
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -31,9 +33,9 @@
 
         <TextBox Background="GhostWhite" Grid.Row="1" Grid.Column="0" Name="messageInput" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" Margin="5" />
         <Button Background="GhostWhite" Grid.Row="1" Grid.Column="1" Content="Send message" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Send_Msg" Margin="5"/>
-        <ScrollViewer Background="White" Grid.Row="0" Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+        <ScrollViewer ScrollChanged="ScrollViewer_ScrollChanged" Name="msgPanelScroll" Background="White" Grid.Row="0" Grid.Column="0" VerticalScrollBarVisibility="Visible" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
 
-            <StackPanel Name="msgStackPanel" Orientation="Vertical">
+            <StackPanel Name="msgStackPanel" Orientation="Vertical" VerticalAlignment="Bottom">
 
             </StackPanel>
         </ScrollViewer>

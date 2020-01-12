@@ -9,7 +9,7 @@
       Title="LogPage1">
 
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
 
             <StackPanel>
                 <StackPanel>

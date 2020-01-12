@@ -36,11 +36,10 @@ public class User
         this.phoneNum = pNum;
         this.city = City;
         this.country = Country;
-    }
 
-    public void updateProfile(string nick, int pNum, string City, string Country)
-    {
-
+        conversations = new List<Conversation>();
+        friendList = new List<int>();
+        pendingOrders = new List<Order>();
     }
 }
 
