@@ -25,15 +25,15 @@
 
                     <TextBlock HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Email" VerticalAlignment="Top" Width="Auto" Margin="25,5,10,2"
                                ToolTip="Adres e-mail musi zawierać znak '@', na podany adres zostanie wysłany kod aktywacyjny!"/>
-                    <TextBox Name="email" HorizontalAlignment="Stretch" Height="30" Margin="10,0,10,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                    <TextBox Name="email" MaxLength="320" HorizontalAlignment="Stretch" Height="30" Margin="10,0,10,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" />
 
                     <TextBlock HorizontalAlignment="Left" Margin="25,5,10,2" TextWrapping="Wrap" Text="Hasło" VerticalAlignment="Top"
-                               ToolTip="Dostępne znaki a-z, A-Z, 0-9. Twoje hasło musi zawierać minimum 8 znaków"/>
-                    <PasswordBox Name="password1" HorizontalAlignment="Stretch" Margin="10,0,10,0" VerticalAlignment="Top" Height="30" VerticalContentAlignment="Center"/>
+                               ToolTip="Dostępne znaki a-z, A-Z, 0-9. Twoje hasło musi zawierać pomiędzy 8, a 30 znaków"/>
+                    <PasswordBox Name="password1" MaxLength="30" HorizontalAlignment="Stretch" Margin="10,0,10,0" VerticalAlignment="Top" Height="30" VerticalContentAlignment="Center"/>
 
                     <TextBlock HorizontalAlignment="Left" Margin="25,5,10,2" TextWrapping="Wrap" Text="Powtórz hasło" VerticalAlignment="Top"
                                ToolTip="Wpisz hasło ponownie"/>
-                    <PasswordBox Name="password2" HorizontalAlignment="Stretch" Margin="10,0,10,0" VerticalAlignment="Top" Height="30" VerticalContentAlignment="Center"/>
+                    <PasswordBox Name="password2" MaxLength="30" HorizontalAlignment="Stretch" Margin="10,0,10,0" VerticalAlignment="Top" Height="30" VerticalContentAlignment="Center"/>
 
                     <CheckBox Name="agreement" Content="Akceptuję regulamin" HorizontalAlignment="Left" Margin="25,5,0,0" VerticalAlignment="Top"/>
 

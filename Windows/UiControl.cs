@@ -28,8 +28,8 @@ namespace Client.Windows
         public static void OpenWindow(Window open, Window toOpen)
         {
             System.Drawing.Point loc = GetPosition(open);
-            toOpen.Top = loc.Y + 20;
-            toOpen.Left = loc.X + 20;
+            toOpen.Top = loc.Y;
+            toOpen.Left = loc.X;
             toOpen.Show();
         }
     }

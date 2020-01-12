@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Client.Resources;
 
 namespace Client.Windows
 {
@@ -66,12 +67,12 @@ namespace Client.Windows
             int accNum;
             int phoneNum;
             if (!String.IsNullOrEmpty(search1.Text))
-                accNum = Int32.Parse(search1.Text);
+                Int32.TryParse(search1.Text, out accNum);
             else
                 accNum = 0;
 
             if (!String.IsNullOrEmpty(search2.Text))
-                phoneNum = Int32.Parse(search2.Text);
+                Int32.TryParse(search2.Text, out phoneNum);
             else
                 phoneNum = 0;
 
@@ -100,19 +101,25 @@ namespace Client.Windows
 
             if (foundAccounts.Count == 0)
             {
-                Dispatcher.Invoke(new Action(() => resultCounter.Text = "Brak wyników"));
-                
+                // Dispatcher.Invoke(new Action(() => resultCounter.Text = "Brak wyników"));
+                resultCounter.Text = "Brak wyników";
             }
             else
             {
-                resultCounter.Text = $"{foundAccounts.Count} wyników";
+                resultCounter.Text = $"Znaleziono {foundAccounts.Count} kontakt(ów)";
                 foreach (User acc in foundAccounts)
                 {
-                    Button btn = new Button();
-                    btn.Content = acc.accNumber;
-                    btn.CommandParameter = acc.accNumber;
-                    resultStackPanel.Children.Add(btn);
-                    btn.Click += sendFriendRequest;
+                    searchFriendElem elem = new searchFriendElem();
+                    elem.addFriendButton.CommandParameter = acc.accNumber;
+                    elem.addFriendButton.Click += sendFriendRequest;
+                    elem.numberBox.Text = $"{acc.accNumber}";
+                    elem.emailBox.Text = acc.email;
+                    elem.nickBox.Text = acc.nickName;
+                    if (acc.phoneNum != 0)
+                        elem.phoneNumBox.Text = $"{acc.phoneNum}";
+
+                    resultStackPanel.Children.Add(elem);
+
                 }
             }
 
@@ -122,6 +129,7 @@ namespace Client.Windows
         {
             Button btn = (Button)sender;
             int receiver = (int)btn.CommandParameter;
+            btn.IsEnabled = false;
             Order fRequest = new Order(1, MainWindow.profile.token, MainWindow.profile.accNumber, receiver, DateTime.Now);
 
             byte[] sendBuff = serializer.Serialize_Obj(fRequest);
@@ -133,6 +141,7 @@ namespace Client.Windows
 
             // send friend request
         }
+
 
     }
 }

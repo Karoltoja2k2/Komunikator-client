@@ -31,6 +31,7 @@ namespace Client.Windows
         public byte[] buffer = new byte[2048];
         public static List<ChatWindow> chatWindows = new List<ChatWindow>();
         public SearchWindow searchWindow;
+        public ProfileWindow profWindow;
 
         public static Serializer serializer = new Serializer();
         public static Order deserializeOrderType = new Order();
@@ -44,6 +45,7 @@ namespace Client.Windows
             profile = userProfile;
             socket = connetion;
             socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, receiveCallBack, socket);
+            Loaded += showFriendList;
             InitializeComponent();
 
             renderData();
@@ -62,6 +64,8 @@ namespace Client.Windows
             {
                 renderFriendRequestElem(ord.sender);
             }
+
+            numberBlock.Text = $"{profile.accNumber}, {profile.nickName}";
         }
 
 
@@ -204,9 +208,15 @@ namespace Client.Windows
         }
 
 
+        private void profileDataButton(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            profWindow = new ProfileWindow(profile, socket);
+            profWindow.Owner = this;
+            UiControl.OpenWindow(this, profWindow);
+        }
 
-
-    private void searchContactWindow(object sender, RoutedEventArgs e)
+        private void searchContactWindow(object sender, RoutedEventArgs e)
         {
             this.Hide();
             searchWindow = new SearchWindow(profile, socket);
@@ -232,39 +242,58 @@ namespace Client.Windows
 
         private void showFRequests(object sender, RoutedEventArgs e)
         {
-            if (profile.pendingOrders.Count != 0)
+            int reqCount = profile.pendingOrders.Count;
+            if (reqCount != 0)
             {
                 if (friendRequestPanel.Height == 0)
                 {
+                    resultsCounter.Visibility = Visibility.Visible;
+                    resultCountBox.Text = $"Zaproszenia: {reqCount}";
+
                     friendRequestPanel.Height = Double.NaN;
                     friendsStackPanel.Height = 0;
                 }
                 else
+                {
+                    resultsCounter.Visibility = Visibility.Collapsed;
                     friendRequestPanel.Height = 0;
+                }
             }
             else
             {
-                reqListBtn.Background = new SolidColorBrush(Colors.Red);
+                friendsStackPanel.Height = 0;
+                resultsCounter.Visibility = Visibility.Visible;
+                resultCountBox.Text = $"Brak zaproszeń";
             }
         }
 
         private void showFriendList(object sender, RoutedEventArgs e)
         {
-            if (profile.conversations.Count != 0)
+            int frCount = profile.conversations.Count;
+            if (frCount != 0)
             {
                 if (friendsStackPanel.Height == 0)
                 {
+                    resultsCounter.Visibility = Visibility.Visible;
+                    resultCountBox.Text = $"Kontakty: {frCount}";
+
                     friendsStackPanel.Height = Double.NaN;
                     friendRequestPanel.Height = 0;
                 }
                 else
+                {
+                    resultsCounter.Visibility = Visibility.Collapsed;
                     friendsStackPanel.Height = 0;
+                }
             }
             else
             {
-                friendListBtn.Foreground = new SolidColorBrush(Colors.Red);
+                friendRequestPanel.Height = 0;
+                resultsCounter.Visibility = Visibility.Visible;
+                resultCountBox.Text = $"Brak kontaktów";
             }
         }
+
 
     }
 }

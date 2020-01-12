@@ -105,6 +105,7 @@ public class Order
         this.succes = succes;
         this.messages = messages;
         this.acc = acc;
+        this.pendingOrders = pOrders;
         this.friendList = fList;
         this.helpMsg = msg;
     }
@@ -132,6 +133,17 @@ public class Order
         this.foundProfiles = foundProfiles;
     }
 
+    /// <summary>
+    /// ordertype == 9, update profile info in DB
+    /// </summary>
+    public Order(int orderType, int sender, string email, string nickName, int phoneNum)
+    {
+        this.orderType = orderType;
+        this.sender = sender;
+        this.email = email;
+        this.nickName = nickName;
+        this.phoneNum = phoneNum;
+    }
 }
 
 
